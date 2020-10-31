@@ -110,8 +110,6 @@ export default function PersonsBox() {
       setExpanded(isExpanded ? panel : false);
     };
 
-    console.log(state.persons);
-
   return (
     <React.Fragment>
     

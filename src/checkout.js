@@ -16,13 +16,13 @@ import InformationForm from './InformationForm';
 import ReviewForm from './ReviewForm';
 import GlobalState from './GlobalState';
 import AddressForm from './AddressForm';
+import BookService from './services/BookService';
 
 import {BrowserView, MobileView} from 'react-device-detect';
 import * as EmailValidator from 'email-validator';
 
 
 import MobileStepper from './MobileStepper';
-import PersonsBox from './PersonsBox';
 
 
 
@@ -110,9 +110,12 @@ function getStepContent(step) {
 export default function Checkout() {
   const [state, setState] = React.useContext(GlobalState);
   const classes = useStyles();
-  const theme = useTheme();
 
   const [activeStep, setActiveStep] = React.useState(0);
+
+  const [submiting, setSubmiting] = React.useState(false);
+
+
   const maxSteps = steps.length;
 
 
@@ -186,8 +189,52 @@ export default function Checkout() {
         error = true;
       }
     }
-
+    else if (step === 4)
+    {
+      error = true;
+      setSubmiting(true);
+      submitForm();
+    }
       return !error;   
+  }
+
+  const submitForm = () =>
+  {
+    var promiseArray = [];
+
+    const personInfo = {
+      gender: state.gender,
+      title: state.title,
+      firstname: state.firstname,
+      lastname: state.lastname,
+      birthDate: state.birthDate,
+      email: state.email,
+      phone: state.phone,
+      postCode: state.postCode,
+      address: state.address,
+      notes: state.notes,
+      certificate: state.certificate,
+      passportNumber: state.passportNumber
+    };
+
+    const promise = BookService.bookAppointment({...personInfo, bookingDate: state.bookingDate, bookingTime: state.bookingTime, bookingRef: '1326498'});
+
+    promiseArray.push(promise);
+
+    state.persons.forEach((person) => {
+      promiseArray.push(BookService.bookAppointment({...person,bookingDate: state.bookingDate, bookingTime: state.bookingTime, bookingRef: '1326498'}));
+    });
+    
+    Promise.all(promiseArray).then( (values) => {
+      setSubmiting(false);
+      setActiveStep(activeStep + 1);
+
+    }).catch( (err) =>
+    {
+      console.log(err);
+      setSubmiting(false);
+    });
+
   }
 
 
@@ -299,11 +346,12 @@ export default function Checkout() {
                 {getStepContent(activeStep)}
                 <div className={classes.buttons}>
                   {activeStep !== 0 && (
-                    <Button onClick={handleBack} className={classes.button}>
+                    <Button disabled={submiting} onClick={handleBack} className={classes.button}>
                       Back
                     </Button>
                   )}
                   <Button
+                    disabled={submiting} 
                     variant="contained"
                     color="primary"
                     onClick={handleNext}

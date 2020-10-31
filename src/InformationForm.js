@@ -177,7 +177,7 @@ export default function InformationForm() {
                         autoOk
                         fullWidth
                         variant="inline"
-                        label="Birthday"
+                        label="Birthdate"
                         format="dd/MM/yyyy"
                         disableFuture
                         InputAdornmentProps={{ position: "start" }}

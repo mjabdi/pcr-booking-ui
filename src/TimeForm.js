@@ -106,7 +106,6 @@ export default function TimeForm() {
         {
             setTime(key);
             setState({...state, bookingTime : key});
-            console.log(key);
         }
 
     }

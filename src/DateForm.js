@@ -33,7 +33,7 @@ function LoadData(callback){
 
       Promise.all([promise1, promise2]).then( (values) => {
 
-        firstAvailableDay = values[0];
+        firstAvailableDay = new Date((values[0].data).date);
         fullyBookedDays = values[1];
 
         callback(true);

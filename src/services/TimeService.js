@@ -1,18 +1,11 @@
 import TimeSlot from './../models/TimeSlot';
+import API from './api';
 
 export default class TimeService{
 
      static getFirstAvailableDay =  () =>
     {
-        return new Promise( (resolve, reject) =>
-        {
-            var someDate = new Date();
-            var duration = 3; //In Days
-            someDate.setTime(someDate.getTime() +  (duration * 24 * 60 * 60 * 1000));
-            setTimeout(() => {
-                resolve(someDate);
-            }, 1000);
-        });
+        return API.get('/api/time/getfirstavaiableday');
     }
 
     static dayIsBooked =  (date) =>
@@ -36,7 +29,7 @@ export default class TimeService{
             someDate.setTime(someDate.getTime() +  (duration * 24 * 60 * 60 * 1000));
             setTimeout(() => {
                 resolve([someDate]);
-            }, 1000);
+            }, 0);
        });
     }
 

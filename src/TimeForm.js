@@ -73,7 +73,7 @@ const useStyles = makeStyles((theme) => ({
 
     Promise.all([promise1]).then( (values) => {
 
-      timeSlots = values[0];
+      timeSlots = values[0].data;
 
       callback(true);
 

@@ -28,8 +28,8 @@ const useStyles = makeStyles((theme) => ({
 
 function LoadData(callback){
 
-      const promise1 = TimeService.getFirstAvailableDay();
-      const promise2 = TimeService.getFullyBookedDays();
+      const promise1 = TimeService.getFirstAvailableDate();
+      const promise2 = TimeService.getFullyBookedDates();
 
       Promise.all([promise1, promise2]).then( (values) => {
 

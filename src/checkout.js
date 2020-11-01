@@ -23,6 +23,7 @@ import * as EmailValidator from 'email-validator';
 
 
 import MobileStepper from './MobileStepper';
+import doneImage from './images/ok.png';
 
 
 
@@ -64,9 +65,9 @@ const useStyles = makeStyles((theme) => ({
     },
   },
   paper: {
-    marginTop: theme.spacing(3),
+    marginTop: theme.spacing(1),
     marginBottom: theme.spacing(3),
-    padding: theme.spacing(2),
+    padding: theme.spacing(1),
     [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
       marginTop: theme.spacing(6),
       marginBottom: theme.spacing(6),
@@ -84,6 +85,18 @@ const useStyles = makeStyles((theme) => ({
     marginTop: theme.spacing(3),
     marginLeft: theme.spacing(1),
   },
+
+  bold: {
+    fontWeight: "800",
+    padding: "5px"
+  },
+
+  doneImage: {
+    width: "240px",
+    height: "150px",
+    margin: "20px"
+  }
+
 }));
 
 const steps = ['Appoinment Date', 'Appoinment Time', 'Basic Info', 'Address Info' ,'Review'];
@@ -188,6 +201,10 @@ export default function Checkout() {
         setState(state => ({...state, passportNumberError : true}));
         error = true;
       }
+
+      if (!error){
+        setState(state => ({...state, proceedToSubmit: false}));
+      }
     }
     else if (step === 4)
     {
@@ -202,39 +219,60 @@ export default function Checkout() {
   {
     var promiseArray = [];
 
-    const personInfo = {
-      gender: state.gender,
-      title: state.title,
-      firstname: state.firstname,
-      lastname: state.lastname,
-      birthDate: state.birthDate,
-      email: state.email,
-      phone: state.phone,
-      postCode: state.postCode,
-      address: state.address,
-      notes: state.notes,
-      certificate: state.certificate,
-      passportNumber: state.passportNumber
-    };
+    BookService.getNewReference().then( (res) => {
 
-    const promise = BookService.bookAppointment({...personInfo, bookingDate: state.bookingDate, bookingTime: state.bookingTime, bookingRef: '1326498'});
+      const ref = res.data.ref;
 
-    promiseArray.push(promise);
+      setState(state => ({...state, ref: ref}));
 
-    state.persons.forEach((person) => {
-      promiseArray.push(BookService.bookAppointment({...person,bookingDate: state.bookingDate, bookingTime: state.bookingTime, bookingRef: '1326498'}));
-    });
+      if (!state.proceedToSubmit)
+      {
+        const personInfo = {
+          gender: state.gender,
+          title: state.title,
+          firstname: state.firstname,
+          lastname: state.lastname,
+          birthDate: state.birthDate,
+          email: state.email,
+          phone: state.phone,
+          postCode: state.postCode,
+          address: state.address,
+          notes: state.notes,
+          certificate: state.certificate,
+          passportNumber: state.passportNumber
+        };
     
-    Promise.all(promiseArray).then( (values) => {
-      setSubmiting(false);
-      setActiveStep(activeStep + 1);
+        const promise = BookService.bookAppointment({...personInfo, bookingDate: state.bookingDate, bookingTime: state.bookingTime, bookingRef: ref});
+        promiseArray.push(promise);
+      }
+  
+  
+  
+      state.persons.forEach((person) => {
+        promiseArray.push(BookService.bookAppointment({...person,bookingDate: state.bookingDate, bookingTime: state.bookingTime, bookingRef: ref }));
+      });
+      
+      Promise.all(promiseArray).then( (values) => {
+        setSubmiting(false);
+        setActiveStep(activeStep + 1);
+  
+      }).catch( (err) =>
+      {
+        console.log(err);
+        setSubmiting(false);
+      });
 
     }).catch( (err) =>
     {
       console.log(err);
       setSubmiting(false);
-    });
+    });;
+  }
 
+  const proceedToSubmit = () =>
+  {
+    setState(state => ({...state, proceedToSubmit: true}));
+    setActiveStep(4);
   }
 
 
@@ -284,14 +322,14 @@ export default function Checkout() {
       <AppBar position="absolute" color="default" className={classes.appBar}>
         <Toolbar>
             {/* <img src="logo.png" alt="logo" className={classes.logo} /> */}
-          <Typography variant="h4" color="inherit" noWrap>
+          <Typography variant="h6" color="inherit" noWrap>
                  Medical Express Clinic
           </Typography>
         </Toolbar>
       </AppBar>
       <main className={classes.layout}>
         <Paper className={classes.paper}>
-          <Typography component="h1" variant="h4" align="center">
+          <Typography component="h1" variant="h6" align="center">
                 Book Appointment Online
           </Typography>
 
@@ -333,12 +371,15 @@ export default function Checkout() {
           <React.Fragment>
             {activeStep === steps.length ? (
               <React.Fragment>
+
+                <img className={classes.doneImage} src={doneImage} alt="Done image"/>
+
                 <Typography variant="h5" gutterBottom>
-                  Thank you for your order.
+                  Thank you for your Booking.
                 </Typography>
+                <br/>
                 <Typography variant="subtitle1">
-                  Your order number is #2001539. We have emailed your order confirmation, and will
-                  send you an update when your order has shipped.
+                  Your booking number is <span className={classes.bold}>{`"${state.ref}"`}</span> . We have emailed your booking information, and will look forward to meet you at the clinic. 
                 </Typography>
               </React.Fragment>
             ) : (
@@ -346,7 +387,7 @@ export default function Checkout() {
                 {getStepContent(activeStep)}
                 <div className={classes.buttons}>
                   {activeStep !== 0 && (
-                    <Button disabled={submiting} onClick={handleBack} className={classes.button}>
+                    <Button disabled={submiting} onClick={handleBack} onTouchTap = {handleBack}  className={classes.button}>
                       Back
                     </Button>
                   )}
@@ -354,6 +395,7 @@ export default function Checkout() {
                     disabled={submiting} 
                     variant="contained"
                     color="primary"
+                    onTouchTap = {handleNext} 
                     onClick={handleNext}
                     className={classes.button}
                   >
@@ -364,8 +406,19 @@ export default function Checkout() {
                     <Button 
                             variant="contained"
                             color="primary"
+                            onTouchTap = {addAnotherPerson} 
                             onClick={addAnotherPerson} className={classes.button}>
                       Add Another Person
+                    </Button>
+                  )}
+
+                {(activeStep === 2 && state.persons && state.persons.length >= 1) && (
+                    <Button 
+                            variant="contained"
+                            color="primary"
+                            onTouchTap = {proceedToSubmit} 
+                            onClick={proceedToSubmit} className={classes.button}>
+                      Proceed to Submit
                     </Button>
                   )}
 

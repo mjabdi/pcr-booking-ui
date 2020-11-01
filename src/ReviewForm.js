@@ -13,6 +13,8 @@ import { faClock } from '@fortawesome/free-solid-svg-icons';
 import { faHourglassHalf } from '@fortawesome/free-solid-svg-icons';
 import dateFormat from 'dateformat';
 
+
+
 const useStyles = makeStyles((theme) => ({
   box: {
     backgroundColor : "#373737",
@@ -98,6 +100,18 @@ const useStyles = makeStyles((theme) => ({
   Accordion:{
     backgroundColor : "#f5f5f5",
     color: "#222"
+  },
+
+  terms: {
+    fontWeight: "500",
+    textAlign: "justify",
+    marginTop: "10px",
+    padding: "10px",
+  },
+
+  link:{
+    color: "#dc2626",
+    textDecoration: "none",
   }
 
 }));
@@ -192,7 +206,6 @@ export default function ReviewForm() {
 
           <span className={classes.title}> Appointment is for the following people :</span>
 
-
           {state.persons.map((person,index) => (
    
                   <Grid item xs={12} md={12}>
@@ -252,62 +265,69 @@ export default function ReviewForm() {
                     </Grid> 
                     ))}
 
+            { (!state.proceedToSubmit) && 
+                      <Grid item xs={12} md={12}>
+                      <div className={classes.root}>
+                          <Accordion className={classes.Accordion} expanded={expanded === 'panel10'} onChange={handleChange('panel10')}>
+                            <AccordionSummary
+                              expandIcon={<ExpandMoreIcon />}
+                              aria-controls="panel10bh-content"
+                              id="panel10bh-header"
+                            >
+                              <Typography className={classes.heading}> {`#${state.persons.length + 1}`} </Typography>
+                              <Typography className={classes.secondaryHeading}>
+                                {`${state.firstname} ${state.lastname}`}
+                              </Typography>
+                            </AccordionSummary>
+                            <AccordionDetails className={classes.infoDetails}>
+                              
+                                <ul className={classes.ul}>
+                                  <li className={classes.li}>
+                                    <span className={classes.infoTitle}>Gender</span> <span className={classes.infoData}>{state.gender}</span>   
+                                  </li>
+                                  <li className={classes.li}>
+                                    <span className={classes.infoTitle}>Title</span>  <span className={classes.infoData}>{state.title}</span>   
+                                  </li>
+                                  <li className={classes.li}>
+                                    <span className={classes.infoTitle}>Forename</span> <span className={classes.infoData}>{state.firstname}</span>   
+                                  </li>
+                                  <li className={classes.li}>
+                                     <span className={classes.infoTitle}>Surname</span> <span className={classes.infoData}>{state.lastname}</span>   
+                                  </li>
+                                  <li className={classes.li}>
+                                     <span className={classes.infoTitle}>Email</span> <span className={classes.infoData}>{state.email}</span>   
+                                  </li>
+                                  <li className={classes.li}>
+                                     <span className={classes.infoTitle}>D.O.B</span> <span className={classes.infoData}>{dateFormat(new Date(state.birthDate),'dd mmm yyyy') }</span>  
+                                  </li>
+                                  <li className={classes.li}>
+                                     <span className={classes.infoTitle}>Telephone</span> <span className={classes.infoData}>{state.phone}</span>  
+                                  </li>
+                                  <li className={classes.li}>
+                                     <span className={classes.infoTitle}>Post Code</span> <span className={classes.infoData}>{state.postCode}</span>  
+                                  </li>
+                                  <li className={classes.li}>
+                                     <span className={classes.infoTitle}>Address</span> <span className={classes.infoData}>{state.address}</span>  
+                                  </li>
+                                  <li className={classes.li}>
+                                     <span className={classes.infoTitle}>Notes</span> <span className={classes.infoData}>{state.notes ?? 'N/A'}</span>  
+                                  </li>
+                                  <li className={classes.li}>
+                                     <span className={classes.infoTitle}>Passport No.</span> <span className={classes.infoData}>{state.passportNumber ?? 'N/A'}</span>  
+                                  </li>
+                                </ul>
+                              
+                            </AccordionDetails>
+                          </Accordion>
+                        </div>
+                  </Grid> 
+            }
+        
+        <div className={classes.terms}>
+            By clicking on submit button you are agreeing with our <a className={classes.link} href="#">terms and condition.</a> 
+        </div>
 
-          <Grid item xs={12} md={12}>
-              <div className={classes.root}>
-                  <Accordion className={classes.Accordion} expanded={expanded === 'panel10'} onChange={handleChange('panel10')}>
-                    <AccordionSummary
-                      expandIcon={<ExpandMoreIcon />}
-                      aria-controls="panel10bh-content"
-                      id="panel10bh-header"
-                    >
-                      <Typography className={classes.heading}> {`#${state.persons.length + 1}`} </Typography>
-                      <Typography className={classes.secondaryHeading}>
-                        {`${state.firstname} ${state.lastname}`}
-                      </Typography>
-                    </AccordionSummary>
-                    <AccordionDetails className={classes.infoDetails}>
-                      
-                        <ul className={classes.ul}>
-                          <li className={classes.li}>
-                            <span className={classes.infoTitle}>Gender</span> <span className={classes.infoData}>{state.gender}</span>   
-                          </li>
-                          <li className={classes.li}>
-                            <span className={classes.infoTitle}>Title</span>  <span className={classes.infoData}>{state.title}</span>   
-                          </li>
-                          <li className={classes.li}>
-                            <span className={classes.infoTitle}>Forename</span> <span className={classes.infoData}>{state.firstname}</span>   
-                          </li>
-                          <li className={classes.li}>
-                             <span className={classes.infoTitle}>Surname</span> <span className={classes.infoData}>{state.lastname}</span>   
-                          </li>
-                          <li className={classes.li}>
-                             <span className={classes.infoTitle}>Email</span> <span className={classes.infoData}>{state.email}</span>   
-                          </li>
-                          <li className={classes.li}>
-                             <span className={classes.infoTitle}>D.O.B</span> <span className={classes.infoData}>{dateFormat(new Date(state.birthDate),'dd mmm yyyy') }</span>  
-                          </li>
-                          <li className={classes.li}>
-                             <span className={classes.infoTitle}>Telephone</span> <span className={classes.infoData}>{state.phone}</span>  
-                          </li>
-                          <li className={classes.li}>
-                             <span className={classes.infoTitle}>Post Code</span> <span className={classes.infoData}>{state.postCode}</span>  
-                          </li>
-                          <li className={classes.li}>
-                             <span className={classes.infoTitle}>Address</span> <span className={classes.infoData}>{state.address}</span>  
-                          </li>
-                          <li className={classes.li}>
-                             <span className={classes.infoTitle}>Notes</span> <span className={classes.infoData}>{state.notes ?? 'N/A'}</span>  
-                          </li>
-                          <li className={classes.li}>
-                             <span className={classes.infoTitle}>Passport No.</span> <span className={classes.infoData}>{state.passportNumber ?? 'N/A'}</span>  
-                          </li>
-                        </ul>
-                      
-                    </AccordionDetails>
-                  </Accordion>
-                </div>
-          </Grid> 
+    
       </Grid>
     </React.Fragment>
   );

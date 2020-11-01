@@ -7,4 +7,9 @@ export default class BookService {
        return API.post('/api/book/bookappointment', payload);
     }
 
+    static getNewReference = () =>
+    {
+        return API.get('/api/book/getnewreference');
+    }
+
 }

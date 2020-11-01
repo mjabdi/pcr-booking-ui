@@ -10,7 +10,7 @@ import PersonsBox from './PersonsBox';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
-      textAlign: "left",
+      textAlign: "justify",
     },
 
     FormTitle:
@@ -114,7 +114,7 @@ export default function AddressForm() {
              <TextField 
                         error={state.phoneError ? true : false}
                         required id="phone" label="Phone Number" 
-                        fullWidth autoComplete="" 
+                        fullWidth autoComplete="tel" 
                         value = {phone}
                         onChange = {phoneChanged} 
              />  
@@ -123,7 +123,7 @@ export default function AddressForm() {
              <TextField 
                         error={state.postCodeError ? true : false}
                         required id="postCode" label="Postal Code" 
-                        fullWidth autoComplete=""
+                        fullWidth autoComplete="postal-code"
                         value = {postCode}
                         onChange = {postCodeChanged} 
              />  
@@ -133,7 +133,7 @@ export default function AddressForm() {
                         error={state.addressError ? true : false}
                         required id="address" label="Address" 
                         multiline rowsMax={2} 
-                        fullWidth autoComplete="" 
+                        fullWidth autoComplete="street-address" 
                         value = {address}
                         onChange = {addressChanged} 
              />  
@@ -152,14 +152,14 @@ export default function AddressForm() {
         <Grid item xs={12} className={classes.formControl} >
           <FormControlLabel className={classes.formControl} 
             control={<Checkbox className={classes.formControl}  color="secondary" name="certificate" checked={certificate} onChange={certificateChanged} />}
-             label="I would like to receive the certificate." 
+             label={<span style={{ fontSize: '0.8rem' }}>{`I also require a medical certificate signed by a doctor declaring me 'fit-to-fly'.`} </span>}
           />
         </Grid>
         <Grid item xs={12} hidden={!certificate} >
              <TextField 
                         error={state.passportNumberError ? true : false}
                         required id="passport" label="Passport Number" 
-                        helperText="To print a certificate for you we need your passport number" 
+                        helperText="your passport number will be noted on your certificate" 
                         fullWidth autoComplete="" 
                         value = {passportNumber}
                         onChange = {passportNumberChanged} 

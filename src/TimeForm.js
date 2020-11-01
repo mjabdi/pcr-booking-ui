@@ -11,6 +11,8 @@ import TimeService from './services/TimeService';
 import Grid from '@material-ui/core/Grid';
 import Skeleton from '@material-ui/lab/Skeleton';
 
+import {BrowserView, MobileView} from 'react-device-detect';
+
 // import Card from '@material-ui/core/Card';
 // import CardActions from '@material-ui/core/CardActions';
 // import CardContent from '@material-ui/core/CardContent';
@@ -45,6 +47,15 @@ const useStyles = makeStyles((theme) => ({
             background: "green",
             color: "#fff"
           },
+      },
+
+      boxMobile: {
+        //backgroundColor: "red",
+        border: "1px solid #999",
+        margin: "5px",
+        padding: "5px",
+        color: "#555",
+        cursor: "pointer"
       },
 
       boxSelected: {
@@ -118,20 +129,45 @@ export default function TimeForm() {
 
       {dataLoaded ?  (
             
+          
+
             <React.Fragment>
-                <div className={classes.root}>
-                        <GridList cellHeight={60} className={classes.gridList} cols={4}>
-                          {timeSlots.map((timeSlot) => (
-                            <GridListTile key={timeSlot.time} cols={1}>
-                              <div 
-                                  onClick= {() => {timeSlot.available? boxClicked(timeSlot.time) : boxClicked(null)}}
-                                  className={(timeSlot.available) ? ((bookingTime === timeSlot.time)? classes.boxSelected : classes.box ): classes.boxDisable}>
-                                  {timeSlot.time}
-                              </div>
-                            </GridListTile>
-                          ))}
-                        </GridList>
-                </div>
+
+              <BrowserView>
+                  <div className={classes.root}>
+                            <GridList cellHeight={60} className={classes.gridList} cols={4}>
+                              {timeSlots.map((timeSlot) => (
+                                <GridListTile key={timeSlot.time} cols={1}>
+                                  <div 
+                                      onClick= {() => {timeSlot.available? boxClicked(timeSlot.time) : boxClicked(null)}}
+                                      className={(timeSlot.available) ? ((bookingTime === timeSlot.time)? classes.boxSelected : classes.box ): classes.boxDisable}>
+                                      {timeSlot.time}
+                                  </div>
+                                </GridListTile>
+                              ))}
+                            </GridList>
+                  </div>
+              
+              </BrowserView>
+
+              <MobileView>
+
+              <div className={classes.root}>
+                            <GridList cellHeight={60} className={classes.gridList} cols={4}>
+                              {timeSlots.map((timeSlot) => (
+                                <GridListTile key={timeSlot.time} cols={1}>
+                                  <div 
+                                      onClick = {() => {timeSlot.available? boxClicked(timeSlot.time) : boxClicked(null)}}
+                                      className={(timeSlot.available) ? ((bookingTime === timeSlot.time)? classes.boxSelected : classes.boxMobile ): classes.boxDisable}>
+                                      {timeSlot.time}
+                                  </div>
+                                </GridListTile>
+                              ))}
+                            </GridList>
+                  </div>
+
+              </MobileView>
+
             </React.Fragment>
       ) : (
         <React.Fragment>

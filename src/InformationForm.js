@@ -148,6 +148,7 @@ export default function InformationForm() {
                     <MenuItem value={'Mr'}>Mr</MenuItem>
                     <MenuItem value={'Mrs'}>Mrs</MenuItem>
                     <MenuItem value={'Miss'}>Miss</MenuItem>
+                    <MenuItem value={'Ms'}>Ms</MenuItem>
                     <MenuItem value={'Dr'}>Dr</MenuItem>
                 </Select>
         </FormControl>
@@ -156,7 +157,7 @@ export default function InformationForm() {
           <TextField 
                     error={state.firstnameError ? true : false}
                     required id="firstName" label="First Name" 
-                    fullWidth autoComplete="" 
+                    fullWidth autoComplete="given-name" 
                     value = {firstname}
                     onChange = {firstnameChanged} 
           />
@@ -165,7 +166,7 @@ export default function InformationForm() {
          <TextField 
                     error={state.lastnameError ? true : false}
                     required id="lastName" label="Last Name" 
-                    fullWidth autoComplete="" 
+                    fullWidth autoComplete="family-name" 
                     value = {lastname}
                     onChange = {lastnameChanged} 
         />  
@@ -191,7 +192,7 @@ export default function InformationForm() {
              <TextField
                         error={state.emailError ? true : false}
                         required id="email" label="Email Address" 
-                        fullWidth autoComplete="" 
+                        fullWidth autoComplete="email"  type="email"
                         value = {email}
                         onChange = {emailChanged} 
              />  

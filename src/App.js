@@ -4,7 +4,7 @@ import GlobalState from './GlobalState';
 import React from 'react';
 
 function App() {
-  const [state, setState] = React.useState({bookingDate: new Date(), persons: []});
+  const [state, setState] = React.useState({activeStep : 0, bookingDate: new Date(), persons: []});
   return (
     <GlobalState.Provider value={[state, setState]}>
       <div className="App">

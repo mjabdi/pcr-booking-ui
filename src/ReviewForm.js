@@ -12,8 +12,12 @@ import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import { faClock } from '@fortawesome/free-solid-svg-icons';
 import { faHourglassHalf } from '@fortawesome/free-solid-svg-icons';
 import dateFormat from 'dateformat';
+import { Button } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import Icon from '@material-ui/core/Icon';
 
-
+import ValidateStep from './Validation';
 
 const useStyles = makeStyles((theme) => ({
   box: {
@@ -48,7 +52,9 @@ const useStyles = makeStyles((theme) => ({
   
 
   ul: {
-     listStyle: "none"
+     listStyle: "none",
+     padding: "0",
+     margin: "0"
   },
 
   li: {
@@ -112,6 +118,10 @@ const useStyles = makeStyles((theme) => ({
   link:{
     color: "#dc2626",
     textDecoration: "none",
+  },
+
+  AddAnother:{
+    marginTop: "10px"
   }
 
 }));
@@ -127,6 +137,39 @@ export default function ReviewForm() {
     const handleChange = (panel) => (event, isExpanded) => {
       setExpanded(isExpanded ? panel : false);
     };
+
+    const addAnotherPerson = () => {
+
+      if (ValidateStep(state, setState, 2) && ValidateStep(state, setState, 3))
+      {
+
+        const personInfo = {
+          gender: state.gender,
+          title: state.title,
+          firstname: state.firstname,
+          lastname: state.lastname,
+          birthDate: state.birthDate,
+          email: state.email,
+          phone: state.phone,
+          postCode: state.postCode,
+          address: state.address,
+          notes: state.notes,
+          certificate: state.certificate,
+          passportNumber: state.passportNumber
+        }
+          var newPersons = state.persons;
+          newPersons.push(personInfo);
+          setState(state => ({activeStep: 2, bookingDate: state.bookingDate, 
+            bookingTime: state.bookingTime,
+            persons: newPersons
+          }));       
+      }else {
+        setState(state => ({...state, activeStep : 2 }));
+      }
+
+  }
+  
+   
 
   return (
     <React.Fragment>
@@ -321,7 +364,21 @@ export default function ReviewForm() {
                           </Accordion>
                         </div>
                   </Grid> 
-            }
+               }
+                  {(!state.persons || (state.persons && state.persons.length < 4)) && (
+
+                    <div className={classes.AddAnother}>
+                          <Button 
+                                  // variant="outlined"
+                                  startIcon={<PersonAddIcon />}
+                                  color="primary"
+                                  onTouchTap = {addAnotherPerson} 
+                                  onClick={addAnotherPerson} className={classes.button}>
+                            Add Another Person
+                          </Button>
+                    </div>
+ 
+                  )}
         
         <div className={classes.terms}>
             By clicking on submit button you are agreeing with our <a className={classes.link} href="#">terms and condition.</a> 

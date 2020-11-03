@@ -19,7 +19,8 @@ import AddressForm from './AddressForm';
 import BookService from './services/BookService';
 
 import {BrowserView, MobileView} from 'react-device-detect';
-import * as EmailValidator from 'email-validator';
+
+import ValidateStep from './Validation';
 
 
 import MobileStepper from './MobileStepper';
@@ -124,7 +125,11 @@ export default function Checkout() {
   const [state, setState] = React.useContext(GlobalState);
   const classes = useStyles();
 
-  const [activeStep, setActiveStep] = React.useState(0);
+ // const [activeStep, setActiveStep] = React.useState(0);
+ 
+ const setActiveStep = (step) => {
+  setState(state => ({...state, activeStep : step}));
+ }
 
   const [submiting, setSubmiting] = React.useState(false);
 
@@ -133,87 +138,7 @@ export default function Checkout() {
 
 
 
-  const ValidateStep = (step) =>
-  {
-    var error = false;
-
-    if (step === 1)
-    {
-      /// Validate time
-      
-      if (!state.bookingTime)
-      {
-        setState(state => ({...state, bookingTimeError : true}));
-        error = true;
-      }
-    } else if (step === 2){
-      ///validate Basic Info
-      if (!state.gender)
-      {
-        setState(state => ({...state, genderError : true}));
-        error = true;
-      }
-      if (!state.title)
-      {
-        setState(state => ({...state, titleError : true}));
-        error = true;
-      }
-      if (!state.firstname || state.firstname.trim().length < 3)
-      {
-        setState(state => ({...state, firstnameError : true}));
-        error = true;
-      }
-      if (!state.lastname || state.lastname.trim().length < 3)
-      {
-        setState(state => ({...state, lastnameError : true}));
-        error = true;
-      }
-      if (!state.birthDate)
-      {
-        setState(state => ({...state, birthDateError : true}));
-        error = true;
-      }
-      if (!state.email || !EmailValidator.validate(state.email))
-      {
-        setState(state => ({...state, emailError : true}));
-        error = true;
-      }
-    }
-    else if (step === 3){
-      ///validate Address Info
-      if (!state.phone || state.phone.trim().length < 6)
-      {
-        setState(state => ({...state, phoneError : true}));
-        error = true;
-      }
-      if (!state.postCode || state.postCode.trim().length < 5)
-      {
-        setState(state => ({...state, postCodeError : true}));
-        error = true;
-      }
-      if (!state.address || state.address.trim().length < 10)
-      {
-        setState(state => ({...state, addressError : true}));
-        error = true;
-      }    
-      if (state.certificate && (!state.passportNumber || state.passportNumber.trim().length < 6))
-      {
-        setState(state => ({...state, passportNumberError : true}));
-        error = true;
-      }
-
-      if (!error){
-        setState(state => ({...state, proceedToSubmit: false}));
-      }
-    }
-    else if (step === 4)
-    {
-      error = true;
-      setSubmiting(true);
-      submitForm();
-    }
-      return !error;   
-  }
+  
 
   const submitForm = () =>
   {
@@ -254,7 +179,7 @@ export default function Checkout() {
       
       Promise.all(promiseArray).then( (values) => {
         setSubmiting(false);
-        setActiveStep(activeStep + 1);
+        setActiveStep(state.activeStep + 1);
   
       }).catch( (err) =>
       {
@@ -276,44 +201,21 @@ export default function Checkout() {
   }
 
 
-  const addAnotherPerson = () => {
-    if (ValidateStep(activeStep))
-    {
-      const personInfo = {
-        gender: state.gender,
-        title: state.title,
-        firstname: state.firstname,
-        lastname: state.lastname,
-        birthDate: state.birthDate,
-        email: state.email,
-        phone: state.phone,
-        postCode: state.postCode,
-        address: state.address,
-        notes: state.notes,
-        certificate: state.certificate,
-        passportNumber: state.passportNumber
-      }
-        var newPersons = state.persons;
-        newPersons.push(personInfo);
-        setState(state => ({bookingDate: state.bookingDate, 
-          bookingTime: state.bookingTime,
-          persons: newPersons
-        }));
-      
-      setActiveStep(2);
-    }
-
-  };
-
   const handleNext = () => {
-      if (ValidateStep(activeStep))
-      {
-          setActiveStep(activeStep + 1);
-      }
+
+    if (state.activeStep === 4)
+    {
+      setSubmiting(true);
+      submitForm();
+
+    }else if (ValidateStep(state, setState, state.activeStep)) {
+    
+        setActiveStep(state.activeStep + 1);
+    }
   };
 
   const handleBack = () => {
-    setActiveStep(activeStep - 1);
+    setActiveStep(state.activeStep - 1);
   };
 
   return (
@@ -336,10 +238,10 @@ export default function Checkout() {
       
 
           <React.Fragment>
-              {activeStep < steps.length ? (
+              {state.activeStep < steps.length ? (
                   <React.Fragment>
                         <BrowserView>
-                                <Stepper activeStep={activeStep} className={classes.stepper}>
+                                <Stepper activeStep={state.activeStep} className={classes.stepper}>
                                     {steps.map((label) => (
                                     <Step key={label}>
                                         <StepLabel>{label}</StepLabel>
@@ -354,7 +256,7 @@ export default function Checkout() {
                                             position="static"
                                             variant="progress"
                                             
-                                            activeStep={activeStep}
+                                            activeStep={state.activeStep}
                                     />
                         </MobileView>  
                   </React.Fragment>
@@ -369,7 +271,7 @@ export default function Checkout() {
           {/* <PersonsBox/> */}
 
           <React.Fragment>
-            {activeStep === steps.length ? (
+            {state.activeStep === steps.length ? (
               <React.Fragment>
 
                 <img className={classes.doneImage} src={doneImage} alt="Done image"/>
@@ -384,13 +286,24 @@ export default function Checkout() {
               </React.Fragment>
             ) : (
               <React.Fragment>
-                {getStepContent(activeStep)}
+                {getStepContent(state.activeStep)}
                 <div className={classes.buttons}>
-                  {activeStep !== 0 && (
+                  {state.activeStep !== 0 && (
                     <Button disabled={submiting} onClick={handleBack} onTouchTap = {handleBack}  className={classes.button}>
                       Back
                     </Button>
                   )}
+
+                  {((state.activeStep === 2 || state.activeStep === 3 ) && state.persons && state.persons.length >= 1) && (
+                    <Button 
+                            // variant="contained"
+                            color="secondary"
+                            onTouchTap = {proceedToSubmit} 
+                            onClick={proceedToSubmit} className={classes.button}>
+                      Skip to Submit
+                    </Button>
+                  )}
+
                   <Button
                     disabled={submiting} 
                     variant="contained"
@@ -399,28 +312,11 @@ export default function Checkout() {
                     onClick={handleNext}
                     className={classes.button}
                   >
-                    {activeStep === steps.length - 1 ? 'Submit' : 'Next'}
+                    {state.activeStep === steps.length - 1 ? 'Submit' : 'Next'}
                   </Button>
                   
-                  {activeStep === 3 && (!state.persons || (state.persons && state.persons.length < 4)) && (
-                    <Button 
-                            variant="contained"
-                            color="primary"
-                            onTouchTap = {addAnotherPerson} 
-                            onClick={addAnotherPerson} className={classes.button}>
-                      Add Another Person
-                    </Button>
-                  )}
 
-                {(activeStep === 2 && state.persons && state.persons.length >= 1) && (
-                    <Button 
-                            variant="contained"
-                            color="primary"
-                            onTouchTap = {proceedToSubmit} 
-                            onClick={proceedToSubmit} className={classes.button}>
-                      Proceed to Submit
-                    </Button>
-                  )}
+
 
 
                 </div>

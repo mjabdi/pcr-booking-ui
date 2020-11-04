@@ -118,7 +118,13 @@ export default function PersonsBox() {
       
 
       <Grid container direction="column" spacing={1} justify="flex-start"  alignItems="stretch">
-          <span className={classes.title}> Persons added so far :</span>
+
+        {state.persons && state.persons.length > 0 && (
+          
+              <span className={classes.title}> Persons added so far :</span>
+
+        )}
+        
 
           {state.persons.map((person,index) => (
    

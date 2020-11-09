@@ -177,6 +177,9 @@ export default function PersonsBox() {
                             <li className={classes.li}>
                                 <span className={classes.infoTitle}>Passport No.</span> <span className={classes.infoData}>{person.passportNumber ?? 'N/A'}</span>  
                             </li>
+                            <li className={classes.li} hidden={!person.passportNumber2 || person.passportNumber2.length === 0}>
+                                <span className={classes.infoTitle}>Second Passport No.</span> <span className={classes.infoData}>{person.passportNumber2 ?? 'N/A'}</span>  
+                            </li>
                         </ul>
                         
                     </AccordionDetails>

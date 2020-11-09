@@ -155,7 +155,8 @@ export default function ReviewForm() {
           address: state.address,
           notes: state.notes,
           certificate: state.certificate,
-          passportNumber: state.passportNumber
+          passportNumber: state.passportNumber,
+          passportNumber2: state.passportNumber2
         }
           var newPersons = state.persons;
           newPersons.push(personInfo);
@@ -218,7 +219,7 @@ export default function ReviewForm() {
             <div className={classes.box}>
               <ul className={classes.ul}>
                 <li className={classes.li}>
-                   Price : £199
+                   Price : £199 (each person)
                 </li>
               </ul>
             </div>
@@ -300,6 +301,9 @@ export default function ReviewForm() {
                               <li className={classes.li}>
                                   <span className={classes.infoTitle}>Passport No.</span> <span className={classes.infoData}>{person.passportNumber ?? 'N/A'}</span>  
                               </li>
+                              <li className={classes.li} hidden={!person.passportNumber2 || person.passportNumber2.length === 0}>
+                                <span className={classes.infoTitle}>Second Passport No.</span> <span className={classes.infoData}>{person.passportNumber2 ?? 'N/A'}</span>  
+                            </li>
                           </ul>
                           
                           </AccordionDetails>
@@ -358,6 +362,10 @@ export default function ReviewForm() {
                                   <li className={classes.li}>
                                      <span className={classes.infoTitle}>Passport No.</span> <span className={classes.infoData}>{state.passportNumber ?? 'N/A'}</span>  
                                   </li>
+                                  <li className={classes.li} hidden={!state.passportNumber2 || state.passportNumber2.length === 0}>
+                                      <span className={classes.infoTitle}>Second Passport No.</span> <span className={classes.infoData}>{state.passportNumber2 ?? 'N/A'}</span>  
+                                  </li>
+                                  
                                 </ul>
                               
                             </AccordionDetails>

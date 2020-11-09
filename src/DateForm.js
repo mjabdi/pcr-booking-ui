@@ -36,6 +36,10 @@ function LoadData(callback){
         firstAvailableDay = new Date((values[0].data).date);
         fullyBookedDays = values[1];
 
+        console.log(firstAvailableDay);
+        console.log(fullyBookedDays);
+
+
         callback(true);
 
       }).catch( (err) =>

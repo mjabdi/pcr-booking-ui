@@ -164,7 +164,8 @@ export default function Checkout() {
           address: state.address,
           notes: state.notes,
           certificate: state.certificate,
-          passportNumber: state.passportNumber
+          passportNumber: state.passportNumber,
+          passportNumber2: state.passportNumber2
         };
     
         const promise = BookService.bookAppointment({...personInfo, bookingDate: state.bookingDate, bookingTime: state.bookingTime, bookingRef: ref});

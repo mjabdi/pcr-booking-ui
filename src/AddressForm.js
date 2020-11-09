@@ -30,6 +30,7 @@ export default function AddressForm() {
     const [address, setAddress] = React.useState(state.address ?? '');
     const [notes, setNotes] = React.useState(state.notes ?? '');
     const [passportNumber, setPassportNumber] = React.useState(state.passportNumber ?? '');
+    const [passportNumber2, setPassportNumber2] = React.useState(state.passportNumber2 ?? '');
 
 
     const [certificate, setCertificate] = React.useState(state.certificate ?? false);
@@ -88,6 +89,12 @@ export default function AddressForm() {
         }
     }
 
+    const passportNumberChanged2 = (event) =>
+    {
+        setPassportNumber2(event.target.value);
+        setState(state => ({...state, passportNumber2 : event.target.value}));
+    }
+
 
   return (
     <React.Fragment>
@@ -142,7 +149,7 @@ export default function AddressForm() {
              <TextField 
                 placeholder={`Must include flight date & flight time also If there's anything you want to tell the doctor beforehand, enter it here`} 
                 id="notes"
-                label="Notes" 
+                label="Notes (optional)" 
                 helperText={`MUST include flight date & flight time`} 
                 multiline rowsMax={2} rows={2} fullWidth autoComplete=""
                 value = {notes}
@@ -163,6 +170,16 @@ export default function AddressForm() {
                         fullWidth autoComplete="" 
                         value = {passportNumber}
                         onChange = {passportNumberChanged} 
+             />  
+        </Grid>
+        <Grid item xs={12} hidden={!certificate} >
+             <TextField 
+                        // error={state.passportNumberError ? true : false}
+                        id="passport2" label="Second Passport Number (optional)" 
+                        helperText="your passport number will be noted on your certificate" 
+                        fullWidth autoComplete="" 
+                        value = {passportNumber2}
+                        onChange = {passportNumberChanged2} 
              />  
         </Grid>
       </Grid>

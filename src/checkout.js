@@ -18,13 +18,26 @@ import GlobalState from './GlobalState';
 import AddressForm from './AddressForm';
 import BookService from './services/BookService';
 
-import {BrowserView, MobileView} from 'react-device-detect';
+import Dialog from '@material-ui/core/Dialog';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import DialogContentText from '@material-ui/core/DialogContentText';
+import DialogTitle from '@material-ui/core/DialogTitle';
+
+import HttpsIcon from '@material-ui/icons/Https';
+
+import {BrowserView, MobileView, isMobile} from 'react-device-detect';
 
 import ValidateStep from './Validation';
 
 
 import MobileStepper from './MobileStepper';
 import doneImage from './images/ok.png';
+import logoImage from './images/logo.png';
+
+import AntiBodyForm from './AntiBodyForm';
+
+
 
 
 
@@ -34,11 +47,13 @@ function Copyright() {
       {'Copyright © '}
       {new Date().getFullYear()}
       {' '}
-      <Link color="inherit" href="https://www.blood.london/">
-            Blood.London. 
-      </Link>{' '}
+      <Link color="inherit" href="#">
+           <strong> Medical Express Clinic </strong> 
+      </Link>{isMobile ? ' ' : ' All rights reserved.' }
+   
+       
+ 
      
-      All rights reserved
     </Typography>
   );
 }
@@ -60,7 +75,7 @@ const useStyles = makeStyles((theme) => ({
     marginLeft: theme.spacing(2),
     marginRight: theme.spacing(2),
     [theme.breakpoints.up(600 + theme.spacing(2) * 2)]: {
-      width: 600,
+      width: 700,
       marginLeft: 'auto',
       marginRight: 'auto',
     },
@@ -96,11 +111,22 @@ const useStyles = makeStyles((theme) => ({
     width: "240px",
     height: "150px",
     margin: "20px"
-  }
+  },
+
+  logoImage: {
+    width: "0px",
+    height: "0px",
+    marginLeft: "0px",
+    
+  },
+
+  privacyButton: {
+    marginBottom : "20px"
+  },
 
 }));
 
-const steps = ['Appoinment Date', 'Appoinment Time', 'Basic Info', 'Address Info' ,'Review'];
+const steps = ['Appoinment Date', 'Appoinment Time', 'Basic Info', 'Address Info', 'Antibody Test','Review'];
 
 function getStepContent(step) {
   switch (step) {
@@ -113,6 +139,8 @@ function getStepContent(step) {
     case 3:
       return <AddressForm />;
     case 4:
+      return <AntiBodyForm />;
+    case 5:
         return <ReviewForm />;
     default:
       throw new Error('Unknown step');
@@ -124,6 +152,38 @@ function getStepContent(step) {
 export default function Checkout() {
   const [state, setState] = React.useContext(GlobalState);
   const classes = useStyles();
+
+
+  //// ** Dialog
+
+  const [open, setOpen] = React.useState(false);
+  const [scroll, setScroll] = React.useState('paper');
+
+  const handleClickOpen = (scrollType) => () => {
+    setOpen(true);
+    setScroll(scrollType);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const descriptionElementRef = React.useRef(null);
+  React.useEffect(() => {
+    if (open) {
+      const { current: descriptionElement } = descriptionElementRef;
+      if (descriptionElement !== null) {
+        descriptionElement.focus();
+      }
+    }
+  }, [open]);
+
+
+
+  /////****************** */
+
+
+
 
  // const [activeStep, setActiveStep] = React.useState(0);
  
@@ -165,7 +225,8 @@ export default function Checkout() {
           notes: state.notes,
           certificate: state.certificate,
           passportNumber: state.passportNumber,
-          passportNumber2: state.passportNumber2
+          passportNumber2: state.passportNumber2,
+          antiBodyTest: state.antiBodyTest ?? false
         };
     
         const promise = BookService.bookAppointment({...personInfo, bookingDate: state.bookingDate, bookingTime: state.bookingTime, bookingRef: ref});
@@ -198,13 +259,13 @@ export default function Checkout() {
   const proceedToSubmit = () =>
   {
     setState(state => ({...state, proceedToSubmit: true}));
-    setActiveStep(4);
+    setActiveStep(5);
   }
 
 
   const handleNext = () => {
 
-    if (state.activeStep === 4)
+    if (state.activeStep === 5)
     {
       setSubmiting(true);
       submitForm();
@@ -227,11 +288,17 @@ export default function Checkout() {
             {/* <img src="logo.png" alt="logo" className={classes.logo} /> */}
           <Typography variant="h6" color="inherit" noWrap>
                  Medical Express Clinic
+
+                 <img className={classes.logoImage} src={logoImage} alt="logo image"/>
           </Typography>
+
+
         </Toolbar>
       </AppBar>
       <main className={classes.layout}>
         <Paper className={classes.paper}>
+
+
           <Typography component="h1" variant="h6" align="center">
                 Book Appointment Online
           </Typography>
@@ -324,7 +391,53 @@ export default function Checkout() {
               </React.Fragment>
             )}
           </React.Fragment>
+
         </Paper>
+
+        <Button 
+                  variant="contained" 
+                  className={classes.privacyButton} 
+                  color="secondary"
+                  startIcon={<HttpsIcon/>}
+                  onClick={handleClickOpen('paper')}
+                  onTouchTap={handleClickOpen('paper')} 
+                  >
+             Privacy
+         </Button>
+         <Dialog
+                        open={open}
+                        onClose={handleClose}
+                        scroll={scroll}
+                        aria-labelledby="scroll-dialog-title"
+                        aria-describedby="scroll-dialog-description"
+                      >
+                        <DialogTitle id="scroll-dialog-title">Application Disclaimer</DialogTitle>
+                        <DialogContent dividers={scroll === 'paper'}>
+                          <DialogContentText
+                            id="scroll-dialog-description"
+                            ref={descriptionElementRef}
+                            tabIndex={-1}
+                          >
+                            <div style={{textAlign:"justify", padding:"10px"}}>
+                              Medical Express Clinic will not contact you for any other reason than to share your test results, and certificate if selected, via the email address provided. The information provided to us via this registration form is never shared with any other organisations, except when this is required by law. 
+
+                                Information provided will never be used for marketing purposes, you cannot opt in.
+
+                                In the case of a positive swab result, our doctor will call on the telephone number provided to inform you of your result and provide additional advice or guidance.
+                          </div>
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={handleClose} color="primary">
+                            Close
+                          </Button>
+                      
+                        </DialogActions>
+      </Dialog>
+
+
+
+
         <Copyright />
       </main>
     </React.Fragment>

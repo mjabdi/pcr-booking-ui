@@ -159,7 +159,10 @@ export default function AddressForm() {
         <Grid item xs={12} className={classes.formControl} >
           <FormControlLabel className={classes.formControl} 
             control={<Checkbox className={classes.formControl}  color="secondary" name="certificate" checked={certificate} onChange={certificateChanged} />}
-             label={<span style={{ fontSize: '0.8rem' }}>{`I also require a medical certificate signed by a doctor declaring me 'fit-to-fly'.`} </span>}
+             label={<span style={{ fontSize: '0.8rem' }}>{`I also require a medical certificate signed by a doctor declaring me 'fit-to-fly'.`} 
+             
+             <span  style={{ fontSize: '1rem', textDecoration: "italic" ,fontWeight:"600" ,color:"#333" }}>  + £50.00 </span> 
+             </span>}
           />
         </Grid>
         <Grid item xs={12} hidden={!certificate} >

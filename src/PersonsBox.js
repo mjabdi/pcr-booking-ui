@@ -8,6 +8,7 @@ import AccordionDetails from '@material-ui/core/AccordionDetails';
 import AccordionSummary from '@material-ui/core/AccordionSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import dateFormat from 'dateformat';
+import {calculatePrice} from './PriceCalculator';
 
 const useStyles = makeStyles((theme) => ({
   box: {
@@ -180,6 +181,18 @@ export default function PersonsBox() {
                             <li className={classes.li} hidden={!person.passportNumber2 || person.passportNumber2.length === 0}>
                                 <span className={classes.infoTitle}>Second Passport No.</span> <span className={classes.infoData}>{person.passportNumber2 ?? 'N/A'}</span>  
                             </li>
+
+                            <li className={classes.li}>
+                                <span className={classes.infoTitle}>Request for Certificate</span> <span className={classes.infoData}>{person.certificate ? 'Yes' : 'No'}</span>  
+                            </li>
+                            <li className={classes.li}>
+                                <span className={classes.infoTitle}>Request for Antibody Test</span> <span className={classes.infoData}>{person.antiBodyTest ? 'Yes' : 'No'}</span>  
+                            </li>
+
+                            <li className={classes.li}>
+                                <span className={classes.infoTitle}>Price</span> <span className={classes.infoData}>{`£${calculatePrice(person)}`}</span>  
+                            </li>
+
                         </ul>
                         
                     </AccordionDetails>

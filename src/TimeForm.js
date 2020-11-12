@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 
 import GlobalState from './GlobalState';
@@ -109,7 +109,11 @@ export default function TimeForm() {
       emptyTimeSlots.push(i);
     }
 
-    LoadData(state.bookingDate, setDataLoaded);
+    useEffect(() => {
+      LoadData(state.bookingDate, setDataLoaded);
+    }, []);
+
+
 
     const boxClicked = (key) =>
     {

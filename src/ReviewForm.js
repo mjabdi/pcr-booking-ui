@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import GlobalState from './GlobalState';
@@ -16,6 +16,8 @@ import { Button } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Icon from '@material-ui/core/Icon';
+
+import {calculatePrice, calculateTotalPrice} from './PriceCalculator';
 
 import ValidateStep from './Validation';
 
@@ -132,7 +134,29 @@ export default function ReviewForm() {
 
     const [state, setState] = React.useContext(GlobalState);
 
+    const [totalPrice, setTotalPrice] =  React.useState(0);
+
     const [expanded, setExpanded] = React.useState(false);
+
+
+    useEffect( () => {
+      
+      var total = 0;
+      
+      if (!state.proceedToSubmit)
+      {
+        total += calculatePrice(state);
+      }
+
+      if (state.persons)
+      {
+        total += calculateTotalPrice(state.persons);
+      }
+
+      setTotalPrice(total);
+
+
+    }, [...state.persons, state]);
 
     const handleChange = (panel) => (event, isExpanded) => {
       setExpanded(isExpanded ? panel : false);
@@ -154,9 +178,10 @@ export default function ReviewForm() {
           postCode: state.postCode,
           address: state.address,
           notes: state.notes,
-          certificate: state.certificate,
+          certificate: state.certificate ?? false,
           passportNumber: state.passportNumber,
-          passportNumber2: state.passportNumber2
+          passportNumber2: state.passportNumber2,
+          antiBodyTest: state.antiBodyTest ?? false
         }
           var newPersons = state.persons;
           newPersons.push(personInfo);
@@ -219,7 +244,7 @@ export default function ReviewForm() {
             <div className={classes.box}>
               <ul className={classes.ul}>
                 <li className={classes.li}>
-                   Price : £199 (each person)
+                   Total Price : {`£${totalPrice}`}
                 </li>
               </ul>
             </div>
@@ -304,6 +329,18 @@ export default function ReviewForm() {
                               <li className={classes.li} hidden={!person.passportNumber2 || person.passportNumber2.length === 0}>
                                 <span className={classes.infoTitle}>Second Passport No.</span> <span className={classes.infoData}>{person.passportNumber2 ?? 'N/A'}</span>  
                             </li>
+
+                            <li className={classes.li}>
+                                <span className={classes.infoTitle}>Request for Certificate</span> <span className={classes.infoData}>{person.certificate ? 'Yes' : 'No'}</span>  
+                            </li>
+                            <li className={classes.li}>
+                                <span className={classes.infoTitle}>Request for Antibody Test</span> <span className={classes.infoData}>{person.antiBodyTest ? 'Yes' : 'No'}</span>  
+                            </li>
+
+                            <li className={classes.li}>
+                                <span className={classes.infoTitle}>Price</span> <span className={classes.infoData}>{`£${calculatePrice(person)}`}</span>  
+                            </li>
+
                           </ul>
                           
                           </AccordionDetails>
@@ -365,6 +402,17 @@ export default function ReviewForm() {
                                   <li className={classes.li} hidden={!state.passportNumber2 || state.passportNumber2.length === 0}>
                                       <span className={classes.infoTitle}>Second Passport No.</span> <span className={classes.infoData}>{state.passportNumber2 ?? 'N/A'}</span>  
                                   </li>
+
+                                  <li className={classes.li}>
+                                    <span className={classes.infoTitle}>Request for Certificate</span> <span className={classes.infoData}>{state.certificate ? 'Yes' : 'No'}</span>  
+                                </li>
+                                <li className={classes.li}>
+                                    <span className={classes.infoTitle}>Request for Antibody Test</span> <span className={classes.infoData}>{state.antiBodyTest? 'Yes' : 'No'}</span>  
+                                </li>
+
+                                <li className={classes.li}>
+                                  <span className={classes.infoTitle}>Price</span> <span className={classes.infoData}>{`£${calculatePrice(state)}`}</span>  
+                               </li>
                                   
                                 </ul>
                               

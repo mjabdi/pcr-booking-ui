@@ -19,6 +19,7 @@ import {
   } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import PersonsBox from './PersonsBox';
+import { Checkbox, FormControlLabel } from '@material-ui/core';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -44,6 +45,14 @@ export default function InformationForm() {
     
     const [gender, setGender] = React.useState(state.gender ?? '');
     const [title, setTitle] = React.useState(state.title ?? '');
+
+    const [emailConfirmed, setEmailConfirmed] = React.useState(state.emailConfirmed ?? false);
+
+    const emailConfirmedChanged = (event) => {
+      setEmailConfirmed(event.target.checked);
+      setState(state => ({...state, emailConfirmed: event.target.checked}));
+      setState(state => ({...state, emailConfirmedError: false}));
+  };
 
     const titleChanged = (event) => {
             setTitle(event.target.value);
@@ -195,8 +204,17 @@ export default function InformationForm() {
                         fullWidth autoComplete="email"  type="email"
                         value = {email}
                         onChange = {emailChanged} 
+                        helperText = 'This email address is where you will receive your results. Please tick the box below to confirm that this is a private email address to which you are happy for us to send your results.'
              />  
         </Grid>
+
+        <Grid item xs={12} className={classes.formControl} >
+          <FormControlLabel className={classes.formControl}  style={ {color: state.emailConfirmedError ? "red" : ''}} 
+            control={<Checkbox className={classes.formControl} style={ {color: state.emailConfirmedError ? "red" : ''}}  color="secondary" name="emailConfirmCheckBox" checked={emailConfirmed} onChange={emailConfirmedChanged} />}
+             label={<span style={{ fontSize: '0.8rem' }}>{`I confirm that this is a private email address to which I am happy for you to send my results.`} </span>}
+          />
+        </Grid>
+
      
       </Grid>
     

@@ -45,6 +45,13 @@ export default function ValidateStep (state,setState, step)
         setState(state => ({...state, emailError : true}));
         error = true;
       }
+
+      if (!state.emailConfirmed)
+      {
+        setState(state => ({...state, emailConfirmedError : true}));
+        error = true;
+      }
+
     }
     else if (step === 3){
       ///validate Address Info

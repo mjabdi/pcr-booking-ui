@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import {
     DatePicker,
@@ -57,7 +57,13 @@ export default function DateForm() {
 
     const [dataLoaded, setDataLoaded] =  React.useState(false);
 
-    LoadData(setDataLoaded);
+    useEffect(() => {
+
+      LoadData(setDataLoaded);
+
+    },[])
+
+    
 
     const dateChanged = (date) =>
     {

@@ -1,5 +1,7 @@
 import './App.css';
 import Checkout from './checkout';
+import WelcomeForm from './WelcomeForm';
+import AgreementForm from './AgreementForm';
 import GlobalState from './GlobalState'; 
 import React from 'react';
 
@@ -8,7 +10,14 @@ function App() {
   return (
     <GlobalState.Provider value={[state, setState]}>
       <div className="App">
-        <Checkout> </Checkout>
+
+
+        
+        {!state.getStarted && ( <WelcomeForm/> )}
+        {state.getStarted && !state.agreed && ( <AgreementForm/>  )}
+        {state.getStarted && state.agreed  && ( <Checkout/>  )}
+
+       
       </div>
     </GlobalState.Provider>
   );

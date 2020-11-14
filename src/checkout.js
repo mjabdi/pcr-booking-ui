@@ -35,10 +35,6 @@ import MobileStepper from './MobileStepper';
 import doneImage from './images/ok.png';
 import logoImage from './images/logo.png';
 
-import AntiBodyForm from './AntiBodyForm';
-
-
-
 
 
 function Copyright() {
@@ -126,7 +122,7 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-const steps = ['Appoinment Date', 'Appoinment Time', 'Basic Info', 'Address Info', 'Antibody Test','Review'];
+const steps = ['Appoinment Date', 'Appoinment Time', 'Basic Info', 'Address Info','Review'];
 
 function getStepContent(step) {
   switch (step) {
@@ -139,8 +135,6 @@ function getStepContent(step) {
     case 3:
       return <AddressForm />;
     case 4:
-      return <AntiBodyForm />;
-    case 5:
         return <ReviewForm />;
     default:
       throw new Error('Unknown step');
@@ -259,13 +253,13 @@ export default function Checkout() {
   const proceedToSubmit = () =>
   {
     setState(state => ({...state, proceedToSubmit: true}));
-    setActiveStep(5);
+    setActiveStep(4);
   }
 
 
   const handleNext = () => {
 
-    if (state.activeStep === 5)
+    if (state.activeStep === 4)
     {
       setSubmiting(true);
       submitForm();
@@ -289,7 +283,7 @@ export default function Checkout() {
           <Typography variant="h6" color="inherit" noWrap>
                  Medical Express Clinic
 
-                 <img className={classes.logoImage} src={logoImage} alt="logo image"/>
+                 {/* <img className={classes.logoImage} src={logoImage} alt="logo image"/> */}
           </Typography>
 
 

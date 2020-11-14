@@ -172,9 +172,9 @@ export default function PersonsBox() {
                             <li className={classes.li}>
                                 <span className={classes.infoTitle}>Address</span> <span className={classes.infoData}>{person.address}</span>  
                             </li>
-                            <li className={classes.li}>
+                            {/* <li className={classes.li}>
                                 <span className={classes.infoTitle}>Notes</span> <span className={classes.infoData}>{person.notes ?? 'N/A'}</span>  
-                            </li>
+                            </li> */}
                             <li className={classes.li}>
                                 <span className={classes.infoTitle}>Passport No.</span> <span className={classes.infoData}>{person.passportNumber ?? 'N/A'}</span>  
                             </li>

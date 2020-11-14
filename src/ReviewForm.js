@@ -23,12 +23,12 @@ import ValidateStep from './Validation';
 
 const useStyles = makeStyles((theme) => ({
   box: {
-    backgroundColor : "#373737",
+    backgroundColor : "#444",
     color: "#fff",
-    padding : "1px",
+    padding : "8px",
     borderRadius : "4px",
     textAlign: "justify",
-    paddingRight: "40px"
+    // paddingRight: "40px"
   },
 
   boxRed: {
@@ -44,9 +44,9 @@ const useStyles = makeStyles((theme) => ({
     textAlign: "justify",
     backgroundColor : "#fafafa",
     color: "#333",
-    padding : "1px",
+    // padding : "1px",
     borderRadius : "4px",
-    paddingRight: "40px",
+    // paddingRight: "40px",
     border: "1px solid #eee",
   },
 
@@ -96,10 +96,10 @@ const useStyles = makeStyles((theme) => ({
 
   title:
   {
-    textAlign : "center",
+    textAlign : "left",
     fontWeight : "500",
     margin: "10px",
-    backgroundColor : "#eee",
+//    backgroundColor : "#eee",
     padding : "10px",
     borderRadius : "4px"
 
@@ -187,6 +187,9 @@ export default function ReviewForm() {
           newPersons.push(personInfo);
           setState(state => ({activeStep: 2, bookingDate: state.bookingDate, 
             bookingTime: state.bookingTime,
+            address: state.address,
+            phone: state.phone,
+            postCode: state.postCode,
             persons: newPersons
           }));       
       }else {
@@ -254,13 +257,13 @@ export default function ReviewForm() {
             <div className={classes.box}>
               <ul className={classes.ul}>
                 <li className={classes.li}>
-                 This time slot is not guaranteed, due to nature of healthcare there might be slight delay to your appointment.
+                In order to aid social distancing during the coronavirus pandemic, there may be a slight delay to your appointment time. Thank you for understanding.
                 </li>
               </ul>
             </div>
           </Grid> 
           
-          <Grid item xs={12} md={12}>
+          {/* <Grid item xs={12} md={12}>
             <div className={classes.boxRed}>
               <ul className={classes.ul}>
                 <li className={classes.li}>
@@ -271,7 +274,7 @@ export default function ReviewForm() {
                 </li>
               </ul>
             </div>
-          </Grid> 
+          </Grid>  */}
 
           <span className={classes.title}> Appointment is for the following people :</span>
 
@@ -320,9 +323,9 @@ export default function ReviewForm() {
                               <li className={classes.li}>
                                   <span className={classes.infoTitle}>Address</span> <span className={classes.infoData}>{person.address}</span>  
                               </li>
-                              <li className={classes.li}>
+                              {/* <li className={classes.li}>
                                   <span className={classes.infoTitle}>Notes</span> <span className={classes.infoData}>{person.notes ?? 'N/A'}</span>  
-                              </li>
+                              </li> */}
                               <li className={classes.li}>
                                   <span className={classes.infoTitle}>Passport No.</span> <span className={classes.infoData}>{person.passportNumber ?? 'N/A'}</span>  
                               </li>
@@ -393,9 +396,9 @@ export default function ReviewForm() {
                                   <li className={classes.li}>
                                      <span className={classes.infoTitle}>Address</span> <span className={classes.infoData}>{state.address}</span>  
                                   </li>
-                                  <li className={classes.li}>
+                                  {/* <li className={classes.li}>
                                      <span className={classes.infoTitle}>Notes</span> <span className={classes.infoData}>{state.notes ?? 'N/A'}</span>  
-                                  </li>
+                                  </li> */}
                                   <li className={classes.li}>
                                      <span className={classes.infoTitle}>Passport No.</span> <span className={classes.infoData}>{state.passportNumber ?? 'N/A'}</span>  
                                   </li>
@@ -437,7 +440,7 @@ export default function ReviewForm() {
                   )}
         
         <div className={classes.terms}>
-            By clicking on submit button you are agreeing with our <a className={classes.link} href="#">terms and condition.</a> 
+            By clicking on submit button you are agreeing with our <a className={classes.link}  target="_blank" href="https://www.medicalexpressclinic.co.uk/terms-and-conditions">terms and condition.</a> 
         </div>
 
     

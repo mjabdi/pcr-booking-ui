@@ -20,6 +20,7 @@ import {
 import DateFnsUtils from '@date-io/date-fns';
 import PersonsBox from './PersonsBox';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
+import AntiBodyComponent from './AntiBodyComponent';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -107,6 +108,8 @@ export default function InformationForm() {
 
 
     <React.Fragment>
+
+      <AntiBodyComponent/>
 
       <PersonsBox/>
 

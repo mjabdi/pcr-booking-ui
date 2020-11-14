@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -7,6 +7,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import Checkbox from '@material-ui/core/Checkbox';
 import GlobalState from './GlobalState';
 import PersonsBox from './PersonsBox';
+import AntiBodyComponent from './AntiBodyComponent';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -29,12 +30,26 @@ export default function AddressForm() {
     const [postCode, setPostCode] = React.useState(state.postCode ?? '');
     const [address, setAddress] = React.useState(state.address ?? '');
     const [notes, setNotes] = React.useState(state.notes ?? '');
+    const [sameAddress, setSameAddress] = React.useState(false);
     const [passportNumber, setPassportNumber] = React.useState(state.passportNumber ?? '');
     const [passportNumber2, setPassportNumber2] = React.useState(state.passportNumber2 ?? '');
 
 
     const [certificate, setCertificate] = React.useState(state.certificate ?? false);
 
+    const sameAddressChanged = (event) =>
+    {
+      setSameAddress(event.target.checked);
+    }
+
+    useEffect( () => {
+
+      if (state.persons && state.persons.length > 0)
+      {
+        setSameAddress(true);
+      }
+
+    } , [state.persons])
 
     const certificateChanged = (event) => {
             setCertificate(event.target.checked);
@@ -99,6 +114,8 @@ export default function AddressForm() {
   return (
     <React.Fragment>
 
+      {/* <AntiBodyComponent/> */}
+      
       <PersonsBox/>
 
       {state.persons.length === 0 &&
@@ -114,12 +131,24 @@ export default function AddressForm() {
       }
 
 
+
   
 
       <Grid container spacing={3} alignItems="baseline">
+
+      <Grid hidden={ !(state.persons && state.persons.length > 0)} item xs={12} className={classes.formControl} >
+          <FormControlLabel className={classes.formControl} 
+            control={<Checkbox className={classes.formControl}  color="secondary" name="sameAddress" checked={sameAddress} onChange={sameAddressChanged} />}
+             label={<span style={{ fontSize: '0.8rem' }}>{`Use the Same Address`} 
+             </span>}
+          />
+        </Grid>
+
+
         <Grid item xs={12} md={6}>
              <TextField 
                         error={state.phoneError ? true : false}
+                        disabled = {sameAddress}
                         required id="phone" label="Phone Number" 
                         fullWidth autoComplete="tel" 
                         value = {phone}
@@ -129,6 +158,7 @@ export default function AddressForm() {
         <Grid item xs={12} md={6}>
              <TextField 
                         error={state.postCodeError ? true : false}
+                        disabled = {sameAddress}
                         required id="postCode" label="Postal Code" 
                         fullWidth autoComplete="postal-code"
                         value = {postCode}
@@ -139,13 +169,14 @@ export default function AddressForm() {
              <TextField 
                         error={state.addressError ? true : false}
                         required id="address" label="Address" 
+                        disabled = {sameAddress}
                         multiline rowsMax={2} 
                         fullWidth autoComplete="street-address" 
                         value = {address}
                         onChange = {addressChanged} 
              />  
         </Grid>
-        <Grid item xs={12}>
+        <Grid hidden="true" item xs={12}>
              <TextField 
                 placeholder={`Must include flight date & flight time also If there's anything you want to tell the doctor beforehand, enter it here`} 
                 id="notes"

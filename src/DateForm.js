@@ -14,8 +14,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-var firstAvailableDay = null;
-var fullyBookedDays = [];
+
 
 const useStyles = makeStyles((theme) => ({
 
@@ -26,27 +25,6 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-function LoadData(callback){
-
-      const promise1 = TimeService.getFirstAvailableDate();
-      const promise2 = TimeService.getFullyBookedDates();
-
-      Promise.all([promise1, promise2]).then( (values) => {
-
-        firstAvailableDay = new Date((values[0].data).date);
-        fullyBookedDays = values[1];
-
-        console.log(firstAvailableDay);
-        console.log(fullyBookedDays);
-
-
-        callback(true);
-
-      }).catch( (err) =>
-      {
-        console.log(err);
-      });
-}
 
 
 export default function DateForm() {
@@ -55,13 +33,36 @@ export default function DateForm() {
     const [state, setState] = React.useContext(GlobalState);
     const [bookingDate, handleDateChange] = React.useState(state.bookingDate ?? new Date());
 
+    const [firstAvailableDay, setFirstAvailableDay] = React.useState(new Date());
+    const [fullyBookedDays, setFullyBookedDays] = React.useState(null);
+
     const [dataLoaded, setDataLoaded] =  React.useState(false);
+
+    const LoadData = () => {
+
+      const promise1 = TimeService.getFirstAvailableDate();
+      const promise2 = TimeService.getFullyBookedDates();
+
+      Promise.all([promise1, promise2]).then( (values) => {
+
+        setFirstAvailableDay(new Date((values[0].data).date));
+        setFullyBookedDays(values[1].data);
+
+        setDataLoaded(true);
+
+      }).catch( (err) =>
+      {
+        console.log(err);
+      });
+}
+
+
 
     useEffect(() => {
 
-      LoadData(setDataLoaded);
+      LoadData();
 
-    },[])
+    },[]);
 
     
 
@@ -70,6 +71,35 @@ export default function DateForm() {
         handleDateChange(date);
         setState(state => ({...state, bookingDate: date}));
     }
+
+    const checkFullyBooked = (date) =>
+  {
+    var result = false;
+
+    if (date.setHours(0,0,0,0) < firstAvailableDay.setHours(0,0,0,0))
+    {
+       result = true;
+    }
+
+    else if (fullyBookedDays && fullyBookedDays.length > 0)
+    {
+     
+
+      for (var i=0 ; i < fullyBookedDays.length ; i++ )
+      {
+        if (new Date(fullyBookedDays[i]).setHours(0,0,0,0) === date.setHours(0,0,0,0))
+        {
+          result = true;
+        }
+      }
+
+      return result;
+    }
+    else
+    {
+      return false;
+    }
+}
 
   return (
 
@@ -146,30 +176,7 @@ export default function DateForm() {
 
 
 
-const checkFullyBooked = (date) =>
-{
-    if (date.setHours(0,0,0,0) < firstAvailableDay.setHours(0,0,0,0))
-    {
-      return true;
-    }
 
-    else if (fullyBookedDays && fullyBookedDays.length > 0)
-    {
-      var result = false;
-      fullyBookedDays.forEach( (value, index) => {
-
-        if (EquallDates(value,date))
-        {
-          result = true;
-        }
-      });
-      return result;
-    }
-    else
-    {
-      return false;
-    }
-}
 
 function EquallDates(date1, date2)
 {

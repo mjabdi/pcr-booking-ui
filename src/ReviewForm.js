@@ -12,7 +12,7 @@ import { faCalendarAlt } from '@fortawesome/free-solid-svg-icons';
 import { faClock } from '@fortawesome/free-solid-svg-icons';
 import { faHourglassHalf } from '@fortawesome/free-solid-svg-icons';
 import dateFormat from 'dateformat';
-import { Button } from '@material-ui/core';
+import { Button, Checkbox, FormControlLabel } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Icon from '@material-ui/core/Icon';
@@ -98,8 +98,8 @@ const useStyles = makeStyles((theme) => ({
   {
     textAlign : "left",
     fontWeight : "500",
-    margin: "10px",
-//    backgroundColor : "#eee",
+    // marginBottom: "5px",
+    marginTop: "5px",
     padding : "10px",
     borderRadius : "4px"
 
@@ -107,7 +107,7 @@ const useStyles = makeStyles((theme) => ({
 
   Accordion:{
     backgroundColor : "#f5f5f5",
-    color: "#222"
+    color: "#111"
   },
 
   terms: {
@@ -123,7 +123,8 @@ const useStyles = makeStyles((theme) => ({
   },
 
   AddAnother:{
-    marginTop: "10px"
+    marginTop: "10px",
+    marginBottom: "10px",
   }
 
 }));
@@ -136,8 +137,16 @@ export default function ReviewForm() {
 
     const [totalPrice, setTotalPrice] =  React.useState(0);
 
-    const [expanded, setExpanded] = React.useState(false);
+    const [expanded, setExpanded] = React.useState('panel10');
 
+    const dataConfirmedChanged = (event) =>
+    {
+      setState(state => ({...state, dataConfirmed : event.target.checked }));
+      if (event.target.checked)
+      {
+        setState(state => ({...state, dataConfirmedError : false }));
+      }
+    }
 
     useEffect( () => {
       
@@ -185,7 +194,10 @@ export default function ReviewForm() {
         }
           var newPersons = state.persons;
           newPersons.push(personInfo);
-          setState(state => ({activeStep: 2, bookingDate: state.bookingDate, 
+          setState(state => ({activeStep: 2, 
+            getStarted: true,
+            agreed : true,
+            bookingDate: state.bookingDate, 
             bookingTime: state.bookingTime,
             address: state.address,
             phone: state.phone,
@@ -207,76 +219,8 @@ export default function ReviewForm() {
       </Typography>
 
       <Grid container direction="column" spacing={1} justify="flex-start"  alignItems="stretch">
-          <Grid item xs={12} md={12}>
-            <div className={classes.box}>
-              <ul className={classes.ul}>
-                <li className={classes.li}>
-                <FontAwesomeIcon icon={faCalendarAlt} className={classes.icon} />
-                    {dateFormat(new Date(state.bookingDate),'dd-mmmm-yyyy')}
-                </li>
-                <li className={classes.li}>
-                <FontAwesomeIcon icon={faHourglassHalf} className={classes.icon} />
-                   Check-up Duration: 30 minutes
-                </li>
-              </ul>
-            </div>
-          </Grid> 
 
-          <Grid item xs={12} md={12}>
-            <div className={classes.box}>
-              <ul className={classes.ul}>
-                <li className={classes.li}>
-                <FontAwesomeIcon icon={faClock} className={classes.icon} />
-                   Time: {state.bookingTime}
-                </li>
-              </ul>
-            </div>
-          </Grid> 
-
-          <Grid item xs={12} md={12}>
-            <div className={classes.box}>
-              <ul className={classes.ul}>
-                <li className={classes.li}>
-                    Package : In-Clinic Test
-                </li>
-              </ul>
-            </div>
-          </Grid> 
-
-          <Grid item xs={12} md={12}>
-            <div className={classes.box}>
-              <ul className={classes.ul}>
-                <li className={classes.li}>
-                   Total Price : {`£${totalPrice}`}
-                </li>
-              </ul>
-            </div>
-          </Grid> 
-
-          <Grid item xs={12} md={12}>
-            <div className={classes.box}>
-              <ul className={classes.ul}>
-                <li className={classes.li}>
-                In order to aid social distancing during the coronavirus pandemic, there may be a slight delay to your appointment time. Thank you for understanding.
-                </li>
-              </ul>
-            </div>
-          </Grid> 
-          
-          {/* <Grid item xs={12} md={12}>
-            <div className={classes.boxRed}>
-              <ul className={classes.ul}>
-                <li className={classes.li}>
-                During the coronavirus pandemic, we must confirm appointments in order to maintain social distancing, 
-                we will email you to confirm your booking if your selected time is possible.
-                 If not, we will contact you with the nearest availability to your request. 
-                 Thank you for understanding.
-                </li>
-              </ul>
-            </div>
-          </Grid>  */}
-
-          <span className={classes.title}> Appointment is for the following people :</span>
+          <div className={classes.title}> Appointment is for the following people :</div>
 
           {state.persons.map((person,index) => (
    
@@ -323,9 +267,6 @@ export default function ReviewForm() {
                               <li className={classes.li}>
                                   <span className={classes.infoTitle}>Address</span> <span className={classes.infoData}>{person.address}</span>  
                               </li>
-                              {/* <li className={classes.li}>
-                                  <span className={classes.infoTitle}>Notes</span> <span className={classes.infoData}>{person.notes ?? 'N/A'}</span>  
-                              </li> */}
                               <li className={classes.li}>
                                   <span className={classes.infoTitle}>Passport No.</span> <span className={classes.infoData}>{person.passportNumber ?? 'N/A'}</span>  
                               </li>
@@ -396,9 +337,6 @@ export default function ReviewForm() {
                                   <li className={classes.li}>
                                      <span className={classes.infoTitle}>Address</span> <span className={classes.infoData}>{state.address}</span>  
                                   </li>
-                                  {/* <li className={classes.li}>
-                                     <span className={classes.infoTitle}>Notes</span> <span className={classes.infoData}>{state.notes ?? 'N/A'}</span>  
-                                  </li> */}
                                   <li className={classes.li}>
                                      <span className={classes.infoTitle}>Passport No.</span> <span className={classes.infoData}>{state.passportNumber ?? 'N/A'}</span>  
                                   </li>
@@ -438,9 +376,76 @@ export default function ReviewForm() {
                     </div>
  
                   )}
+
+
+
+          <Grid item xs={12} md={12}>
+            <div className={classes.box}>
+              <ul className={classes.ul}>
+                <li className={classes.li}>
+                <FontAwesomeIcon icon={faCalendarAlt} className={classes.icon} />
+                    {dateFormat(new Date(state.bookingDate),'dd-mmmm-yyyy')}
+                </li>
+                <li className={classes.li}>
+                <FontAwesomeIcon icon={faHourglassHalf} className={classes.icon} />
+                   Check-up Duration: 5 minutes
+                </li>
+              </ul>
+            </div>
+          </Grid> 
+
+          <Grid item xs={12} md={12}>
+            <div className={classes.box}>
+              <ul className={classes.ul}>
+                <li className={classes.li}>
+                <FontAwesomeIcon icon={faClock} className={classes.icon} />
+                   Time: {state.bookingTime}
+                </li>
+              </ul>
+            </div>
+          </Grid> 
+
+          <Grid item xs={12} md={12}>
+            <div className={classes.box}>
+              <ul className={classes.ul}>
+                <li className={classes.li}>
+                    Package : In-Clinic Test
+                </li>
+              </ul>
+            </div>
+          </Grid> 
+
+          <Grid item xs={12} md={12}>
+            <div className={classes.box}>
+              <ul className={classes.ul}>
+                <li className={classes.li}>
+                   Total Price : {`£${totalPrice}`}
+                </li>
+              </ul>
+            </div>
+          </Grid> 
+
+          <Grid item xs={12} md={12}>
+            <div className={classes.box}>
+              <ul className={classes.ul}>
+                <li className={classes.li}>
+                In order to aid social distancing during the coronavirus pandemic, there may be a slight delay to your appointment time. Thank you for understanding.
+                </li>
+              </ul>
+            </div>
+          </Grid> 
+
         
         <div className={classes.terms}>
             By clicking on submit button you are agreeing with our <a className={classes.link}  target="_blank" href="https://www.medicalexpressclinic.co.uk/terms-and-conditions">terms and condition.</a> 
+        </div>
+
+        <div style={{textAlign:"left", color: "#111", marginLeft:"10px"}}>
+        <FormControlLabel className={classes.formControl}  style={ {color: state.dataConfirmedError ? "red" : ''}} 
+            control={<Checkbox className={classes.formControl} style={ {color: state.dataConfirmedError ? "red" : ''}} 
+             color="secondary" name="emailConfirmCheckBox" checked={state.dataConfirmed} onChange={dataConfirmedChanged} />}
+             label={<span style={{ fontSize: '0.9rem' , fontWeight:"500"}}>{`I confirm that the details in this form are correct, and I am happy for them to appear as written above on my results and certificate (if ordered).`} </span>}
+             />
         </div>
 
     

@@ -43,6 +43,7 @@ export default function InformationForm() {
     const [firstname, setFirstname] = React.useState(state.firstname ?? '');
     const [lastname, setLastname] = React.useState(state.lastname ?? '');
     const [email, setEmail] = React.useState(state.email ?? '');
+    const [retypeEmail, setRetypeEmail] = React.useState(state.retypeEmail ?? '');
     
     const [gender, setGender] = React.useState(state.gender ?? '');
     const [title, setTitle] = React.useState(state.title ?? '');
@@ -78,7 +79,7 @@ export default function InformationForm() {
     {
         setFirstname(event.target.value);
         setState(state => ({...state, firstname : event.target.value }));
-        if (event.target.value && event.target.value.trim().length >= 3)
+        if (event.target.value && event.target.value.trim().length > 0)
         {
           setState(state => ({...state, firstnameError : false}));
         }
@@ -88,7 +89,7 @@ export default function InformationForm() {
     {
         setLastname(event.target.value);
         setState(state => ({...state, lastname : event.target.value }));
-        if (event.target.value && event.target.value.trim().length >= 3)
+        if (event.target.value && event.target.value.trim().length > 0)
         {
           setState(state => ({...state, lastnameError : false}));
         }
@@ -104,6 +105,17 @@ export default function InformationForm() {
         }
     }
 
+    
+    const retypeEmailChanged = (event) =>
+    {
+        setRetypeEmail(event.target.value);
+        setState(state => ({...state, retypeEmail : event.target.value }));
+        if (event.target.value && EmailValidator.validate(event.target.value))
+        {
+          setState(state => ({...state, retypeEmailError : false}));
+        }
+    }
+
   return (
 
 
@@ -115,13 +127,13 @@ export default function InformationForm() {
 
     {state.persons.length === 0 &&
           <Typography className={classes.FormTitle} variant="h6" gutterBottom>
-              Fill Your Basic Info
+              Enter your Info
           </Typography>
     }
 
     {state.persons.length > 0 &&
           <Typography className={classes.FormTitle} variant="h6" gutterBottom>
-              Fill Basic Info
+              Enter your Info
           </Typography>
     }
 
@@ -183,7 +195,7 @@ export default function InformationForm() {
                     onChange = {lastnameChanged} 
         />  
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={12}>
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardDatePicker  
                         error={state.birthDateError ? true : false}
@@ -208,6 +220,17 @@ export default function InformationForm() {
                         value = {email}
                         onChange = {emailChanged} 
                         helperText = 'This email address is where you will receive your results. Please tick the box below to confirm that this is a private email address to which you are happy for us to send your results.'
+             />  
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+             <TextField
+                        error={state.retypeEmailError ? true : false}
+                        required id="retypeEmail" label="Retype Email Address" 
+                        fullWidth autoComplete="none"  type="email"
+                        value = {retypeEmail}
+                        onChange = {retypeEmailChanged} 
+                        // helperText = 'This email address is where you will receive your results. Please tick the box below to confirm that this is a private email address to which you are happy for us to send your results.'
              />  
         </Grid>
 

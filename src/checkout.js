@@ -32,9 +32,13 @@ import ValidateStep from './Validation';
 
 
 import MobileStepper from './MobileStepper';
-import doneImage from './images/ok.png';
-import logoImage from './images/logo.png';
 
+import logoImage from './images/logo.png';
+import { Grid } from '@material-ui/core';
+
+import Backdrop from '@material-ui/core/Backdrop';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import ResultsForm from './ResultsForm';
 
 
 function Copyright() {
@@ -57,10 +61,9 @@ function Copyright() {
 const useStyles = makeStyles((theme) => ({
   appBar: {
     position: 'relative',
-    backgroundColor: "#333",
-    color: "#fff",
-    alignItems: 'center'
-
+    backgroundColor: "#fff",
+    color: "#00a1c5",
+    alignItems: 'center',
   },
 
   logo: {
@@ -81,8 +84,8 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(3),
     padding: theme.spacing(1),
     [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-      marginTop: theme.spacing(6),
-      marginBottom: theme.spacing(6),
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
       padding: theme.spacing(3),
     },
   },
@@ -110,14 +113,19 @@ const useStyles = makeStyles((theme) => ({
   },
 
   logoImage: {
-    width: "0px",
-    height: "0px",
+    width: "40px",
+    height: "40px",
     marginLeft: "0px",
     
   },
 
   privacyButton: {
     marginBottom : "20px"
+  },
+
+  backdrop: {
+    zIndex: theme.zIndex.drawer + 1,
+    color: '#fff',
   },
 
 }));
@@ -196,6 +204,7 @@ export default function Checkout() {
 
   const submitForm = () =>
   {
+
     var promiseArray = [];
 
     BookService.getNewReference().then( (res) => {
@@ -227,25 +236,26 @@ export default function Checkout() {
         promiseArray.push(promise);
       }
   
-  
-  
-      state.persons.forEach((person) => {
-        promiseArray.push(BookService.bookAppointment({...person,bookingDate: state.bookingDate, bookingTime: state.bookingTime, bookingRef: ref }));
-      });
+      for (var i=0 ; i < state.persons?.length; i++){
+        promiseArray.push(BookService.bookAppointment({...state.persons[i],bookingDate: state.bookingDate, bookingTime: state.bookingTime, bookingRef: ref }));
+      }
       
       Promise.all(promiseArray).then( (values) => {
+
+        setState(state => ({...state, finalResults: values}));
+
         setSubmiting(false);
         setActiveStep(state.activeStep + 1);
   
-      }).catch( (err) =>
+      }).catch( (errs) =>
       {
-        console.log(err);
+        console.log(`Error :  ${errs}`);
         setSubmiting(false);
       });
 
     }).catch( (err) =>
     {
-      console.log(err);
+      console.log(`Cannot Get REF NO. : ${err}`);
       setSubmiting(false);
     });;
   }
@@ -261,6 +271,13 @@ export default function Checkout() {
 
     if (state.activeStep === 4)
     {
+      if (!state.dataConfirmed)
+      {
+        setState(state => ({...state, dataConfirmedError : true }));
+        return;
+      }
+  
+
       setSubmiting(true);
       submitForm();
 
@@ -279,14 +296,28 @@ export default function Checkout() {
       <CssBaseline />
       <AppBar position="absolute" color="default" className={classes.appBar}>
         <Toolbar>
-            {/* <img src="logo.png" alt="logo" className={classes.logo} /> */}
-          <Typography variant="h6" color="inherit" noWrap>
-                 Medical Express Clinic
-
-                 {/* <img className={classes.logoImage} src={logoImage} alt="logo image"/> */}
-          </Typography>
 
 
+        <Grid
+            container
+            direction="row"
+            spacing= {1}
+            justify="center"
+            alignItems="center"
+        >
+
+
+            <Grid item item xs={10}>
+                  <Typography  style={{fontWeight: "400"}} variant="h6" color="inherit" noWrap>
+                    Medical Express Clinic
+                  </Typography>
+            </Grid>
+
+            <Grid item xs={2}>
+                    <img className={classes.logoImage} src={logoImage} alt="logo image"/> 
+            </Grid>
+
+        </Grid>  
         </Toolbar>
       </AppBar>
       <main className={classes.layout}>
@@ -334,18 +365,9 @@ export default function Checkout() {
 
           <React.Fragment>
             {state.activeStep === steps.length ? (
-              <React.Fragment>
 
-                <img className={classes.doneImage} src={doneImage} alt="Done image"/>
+              <ResultsForm/>
 
-                <Typography variant="h5" gutterBottom>
-                  Thank you for your Booking.
-                </Typography>
-                <br/>
-                <Typography variant="subtitle1">
-                  Your booking number is <span className={classes.bold}>{`"${state.ref}"`}</span> . We have emailed your booking information, and will look forward to meet you at the clinic. 
-                </Typography>
-              </React.Fragment>
             ) : (
               <React.Fragment>
                 {getStepContent(state.activeStep)}
@@ -429,7 +451,9 @@ export default function Checkout() {
                         </DialogActions>
       </Dialog>
 
-
+      <Backdrop className={classes.backdrop} open={submiting} >
+        <CircularProgress color="inherit" />
+      </Backdrop>
 
 
         <Copyright />

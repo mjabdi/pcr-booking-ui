@@ -20,6 +20,9 @@ import HttpsIcon from '@material-ui/icons/Https';
 import {BrowserView, MobileView, isMobile} from 'react-device-detect';
 
 import AirplanemodeActiveIcon from '@material-ui/icons/AirplanemodeActive';
+import { Grid } from '@material-ui/core';
+
+import logoImage from './images/logo.png';
 
 
 function Copyright() {
@@ -42,10 +45,9 @@ function Copyright() {
 const useStyles = makeStyles((theme) => ({
   appBar: {
     position: 'relative',
-    backgroundColor: "#333",
-    color: "#fff",
-    alignItems: 'center'
-
+    backgroundColor: "#fff",
+    color: "#00a1c5",
+    alignItems: 'center',
   },
 
   logo: {
@@ -66,8 +68,8 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(3),
     padding: theme.spacing(1),
     [theme.breakpoints.up(600 + theme.spacing(3) * 2)]: {
-      marginTop: theme.spacing(6),
-      marginBottom: theme.spacing(6),
+      marginTop: theme.spacing(2),
+      marginBottom: theme.spacing(2),
       padding: theme.spacing(3),
     },
   },
@@ -95,8 +97,8 @@ const useStyles = makeStyles((theme) => ({
   },
 
   logoImage: {
-    width: "0px",
-    height: "0px",
+    width: "40px",
+    height: "40px",
     marginLeft: "0px",
     
   },
@@ -183,11 +185,27 @@ const getStartedClicked = (event) => {
       <AppBar position="absolute" color="default" className={classes.appBar}>
         <Toolbar>
 
-          <Typography  variant="h6" color="inherit" noWrap>
-                 Medical Express Clinic
-          </Typography>
+        <Grid
+            container
+            direction="row"
+            spacing= {1}
+            justify="center"
+            alignItems="center"
+        >
 
 
+            <Grid item item xs={10}>
+                  <Typography  style={{fontWeight: "400"}} variant="h6" color="inherit" noWrap>
+                    Medical Express Clinic
+                  </Typography>
+            </Grid>
+
+            <Grid item xs={2}>
+                    <img className={classes.logoImage} src={logoImage} alt="logo image"/> 
+            </Grid>
+
+        
+        </Grid>  
         </Toolbar>
       </AppBar>
       <main className={classes.layout}>
@@ -228,6 +246,15 @@ const getStartedClicked = (event) => {
           <p className={isMobile ? classes.textContentMobile : classes.textContent}>
                         Secure, verifiable results sent in PDF format via email, hard copies available to collect.        
           </p>
+
+          <p className={isMobile ? classes.textContentMobile : classes.textContent}>
+                                 No card details or payment necessary.        
+          </p>
+
+          <p className={isMobile ? classes.textContentMobile : classes.textContent}>
+                Plans change and you may need to cancel or rearrange your appointment. We take payment for your test only when you attend the clinic.
+          </p>
+
 
           
 

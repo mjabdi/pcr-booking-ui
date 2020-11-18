@@ -25,12 +25,12 @@ export default function ValidateStep (state,setState, step)
         setState(state => ({...state, titleError : true}));
         error = true;
       }
-      if (!state.firstname || state.firstname.trim().length < 3)
+      if (!state.firstname || state.firstname.trim().length < 1)
       {
         setState(state => ({...state, firstnameError : true}));
         error = true;
       }
-      if (!state.lastname || state.lastname.trim().length < 3)
+      if (!state.lastname || state.lastname.trim().length < 1)
       {
         setState(state => ({...state, lastnameError : true}));
         error = true;
@@ -43,6 +43,12 @@ export default function ValidateStep (state,setState, step)
       if (!state.email || !EmailValidator.validate(state.email))
       {
         setState(state => ({...state, emailError : true}));
+        error = true;
+      }
+
+      if (!state.retypeEmail || !EmailValidator.validate(state.retypeEmail) || state.email !== state.retypeEmail)
+      {
+        setState(state => ({...state, retypeEmailError : true}));
         error = true;
       }
 

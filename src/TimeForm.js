@@ -20,8 +20,6 @@ import {BrowserView, MobileView} from 'react-device-detect';
 // import { Mouse, Satellite } from '@material-ui/icons';
 // import { BrowserView } from 'react-device-detect';
 
-var timeSlots = null;
-
 const useStyles = makeStyles((theme) => ({
     
     root: {
@@ -78,21 +76,12 @@ const useStyles = makeStyles((theme) => ({
 
   }));
 
-  function LoadData(date, callback){
-
-    const promise1 = TimeService.getTimeSlots(date);
-
-    Promise.all([promise1]).then( (values) => {
-
-      timeSlots = values[0].data;
-
-      callback(true);
-
-    }).catch( (err) =>
-    {
-      console.log(err);
-    });
+  
+function isWeekend(date)
+{
+    return (date.getDay() === 0 || date.getDay() === 6) /// Weekend
 }
+
 
 export default function TimeForm() {
     const classes = useStyles();
@@ -109,8 +98,46 @@ export default function TimeForm() {
       emptyTimeSlots.push(i);
     }
 
+    const [timeSlots, setTimeSlots] = React.useState(emptyTimeSlots);
+
+    const LoadData = (date) => {
+      setDataLoaded(false);
+
+      const promise1 = TimeService.getTimeSlots(date);
+  
+      Promise.all([promise1]).then( (values) => {
+  
+        const timeSlotsTmp = values[0].data;
+
+        if (isWeekend(date))
+        {
+          for (var i=0 ; i < timeSlotsTmp.length ; i++)
+          {
+            if (parseInt(timeSlotsTmp[i].time.substr(0,2)) < 10 && timeSlotsTmp[i].time.indexOf('AM') > 0)
+            {
+              timeSlotsTmp[i].available = false;
+            }
+  
+            if (parseInt(timeSlotsTmp[i].time.substr(0,2)) > 1 && parseInt(timeSlotsTmp[i].time.substr(0,2)) < 12 &&timeSlotsTmp[i].time.indexOf('PM') > 0)
+            {
+              timeSlotsTmp[i].available = false;
+            }
+          }
+        }
+
+
+        setTimeSlots(timeSlotsTmp);
+        setDataLoaded(true);
+  
+      }).catch( (err) =>
+      {
+        console.log(err);
+      });
+  }
+
     useEffect(() => {
-      LoadData(state.bookingDate, setDataLoaded);
+      if (state.bookingDate && state.bookingDate !== 'undefined')
+         LoadData(state.bookingDate);
     }, []);
 
 

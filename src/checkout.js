@@ -232,12 +232,12 @@ export default function Checkout() {
           antiBodyTest: state.antiBodyTest ?? false
         };
     
-        const promise = BookService.bookAppointment({...personInfo, bookingDate: state.bookingDate, bookingTime: state.bookingTime, bookingRef: ref});
+        const promise = BookService.bookAppointment({...personInfo, bookingDate: state.bookingDate, bookingTime: state.bookingTime, bookingRef: ref, referrer: window.location.pathname});
         promiseArray.push(promise);
       }
   
       for (var i=0 ; i < state.persons?.length; i++){
-        promiseArray.push(BookService.bookAppointment({...state.persons[i],bookingDate: state.bookingDate, bookingTime: state.bookingTime, bookingRef: ref }));
+        promiseArray.push(BookService.bookAppointment({...state.persons[i],bookingDate: state.bookingDate, bookingTime: state.bookingTime, bookingRef: ref, referrer: window.location.pathname}));
       }
       
       Promise.all(promiseArray).then( (values) => {

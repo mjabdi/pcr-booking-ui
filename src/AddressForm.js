@@ -25,22 +25,26 @@ const useStyles = makeStyles((theme) => ({
 export default function AddressForm() {
     const classes = useStyles();
     const [state, setState] = React.useContext(GlobalState);
- 
+    
+    const [sameAddress, setSameAddress] = React.useState(false);
+    
+    const sameAddressChanged = (event) =>
+    {
+      setSameAddress(event.target.checked);
+    }
+
     const [phone, setPhone] = React.useState(state.phone ?? '');
     const [postCode, setPostCode] = React.useState(state.postCode ?? '');
     const [address, setAddress] = React.useState(state.address ?? '');
     const [notes, setNotes] = React.useState(state.notes ?? '');
-    const [sameAddress, setSameAddress] = React.useState(false);
+
     const [passportNumber, setPassportNumber] = React.useState(state.passportNumber ?? '');
     const [passportNumber2, setPassportNumber2] = React.useState(state.passportNumber2 ?? '');
 
 
     const [certificate, setCertificate] = React.useState(state.certificate ?? false);
 
-    const sameAddressChanged = (event) =>
-    {
-      setSameAddress(event.target.checked);
-    }
+
 
     useEffect( () => {
 
@@ -193,8 +197,12 @@ export default function AddressForm() {
              label={<span style={{ fontSize: '0.8rem' }}>{`I also require a medical certificate signed by a doctor declaring me 'fit-to-fly'.`} 
              
              <span  style={{ fontSize: '1rem', textDecoration: "italic" ,fontWeight:"600" ,color:"#333" }}>  + £50.00 </span> 
+
              </span>}
           />
+        <div style={{paddingTop:"10px"}}>
+        {'If your requirements make any mention of a passport number, you will need a certificate. Laboratories do not note passport numbers on their results. If you are going to Spain, you need a certificate.'}
+        </div>
         </Grid>
         <Grid item xs={12} hidden={!certificate} >
              <TextField 

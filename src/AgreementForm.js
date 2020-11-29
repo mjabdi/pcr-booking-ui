@@ -145,7 +145,7 @@ textContentMobile : {
 
 
 
-export default function Checkout() {
+export default function AgreementForm() {
   const [state, setState] = React.useContext(GlobalState);
   const classes = useStyles();
 

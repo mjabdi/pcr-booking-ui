@@ -143,7 +143,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function Checkout() {
+export default function WelcomeForm() {
   const [state, setState] = React.useContext(GlobalState);
   const classes = useStyles();
 
@@ -185,27 +185,33 @@ const getStartedClicked = (event) => {
       <AppBar position="absolute" color="default" className={classes.appBar}>
         <Toolbar>
 
+  
+
         <Grid
-            container
-            direction="row"
-            spacing= {1}
-            justify="center"
-            alignItems="center"
-        >
+                container
+                direction="row"
+                spacing= {1}
+                justify="center"
+                alignItems="center"
+            >
 
 
-            <Grid item item xs={10}>
-                  <Typography  style={{fontWeight: "400"}} variant="h6" color="inherit" noWrap>
-                    Medical Express Clinic
-                  </Typography>
-            </Grid>
+                <Grid item item xs={10}>
+                      <Typography  style={{fontWeight: "400"}} variant="h6" color="inherit" noWrap>
+                        Medical Express Clinic
+                      </Typography>
+                </Grid>
 
-            <Grid item xs={2}>
-                    <img className={classes.logoImage} src={logoImage} alt="logo image"/> 
-            </Grid>
+                <Grid item xs={2}>
+                        <img className={classes.logoImage} src={logoImage} alt="logo image"/> 
+                </Grid>
 
-        
-        </Grid>  
+            
+          </Grid>  
+
+      
+
+
         </Toolbar>
       </AppBar>
       <main className={classes.layout}>

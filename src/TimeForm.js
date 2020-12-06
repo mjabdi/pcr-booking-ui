@@ -10,6 +10,7 @@ import GridListTile from '@material-ui/core/GridListTile';
 import TimeService from './services/TimeService';
 import Grid from '@material-ui/core/Grid';
 import Skeleton from '@material-ui/lab/Skeleton';
+import dateformat from 'dateformat';
 
 import {BrowserView, MobileView} from 'react-device-detect';
 
@@ -101,7 +102,11 @@ export default function TimeForm() {
     const [timeSlots, setTimeSlots] = React.useState(emptyTimeSlots);
 
     const LoadData = (date) => {
+
+      setTimeSlots(emptyTimeSlots);
       setDataLoaded(false);
+
+      const dateStr = dateformat(date,'yyyy-mm-dd');
 
       const promise1 = TimeService.getTimeSlots(date);
   
@@ -109,7 +114,7 @@ export default function TimeForm() {
   
         const timeSlotsTmp = values[0].data;
 
-        if (isWeekend(date))
+        if (isWeekend(date) && dateStr !== '2020-12-27')
         {
           for (var i=0 ; i < timeSlotsTmp.length ; i++)
           {
@@ -131,7 +136,7 @@ export default function TimeForm() {
   
       }).catch( (err) =>
       {
-        console.log(err);
+        console.error(err);
       });
   }
 
@@ -139,6 +144,24 @@ export default function TimeForm() {
       if (state.bookingDate && state.bookingDate !== 'undefined')
          LoadData(state.bookingDate);
     }, []);
+
+    // useEffect(() => {
+    //   var interval ;
+    //   if (state.bookingDate && state.bookingDate !== 'undefined')
+    //     {
+    //       interval = setInterval(() => {
+    //         LoadData(state.bookingDate);
+    //       }, 2000);
+    //     }
+
+    //     return () => {
+    //       if (interval)
+    //         clearInterval(interval);
+    //     }
+        
+    // }, []);
+
+    
 
 
 

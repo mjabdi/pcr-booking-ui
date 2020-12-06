@@ -32,6 +32,8 @@ import {BrowserView, MobileView, isMobile} from 'react-device-detect';
 import logoImage from './images/logo.png';
 import { Checkbox, FormControlLabel, Grid } from '@material-ui/core';
 
+import LiveHelpIcon from '@material-ui/icons/LiveHelp';
+import faq from './FAQ';
 
 
 function Copyright() {
@@ -112,7 +114,21 @@ const useStyles = makeStyles((theme) => ({
     
   },
   privacyButton: {
-    marginBottom : "20px"
+    marginBottom : "20px",
+    width: "115px"
+  },
+
+  faqButton: {
+    marginBottom : "20px",
+    marginLeft : "10px",
+    backgroundColor : "#2f942e",
+    "&:hover": {
+      background: "green",
+      color: "#fff"
+    },
+    textDecoration : "none !important",
+    width: "115px"
+
   },
 
   getStartedButton: {
@@ -159,6 +175,9 @@ export default function AgreementForm() {
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState('paper');
 
+  const [openFAQ, setOpenFAQ] = React.useState(false);
+  const [scrollFAQ, setScrollFAQ] = React.useState('paper');
+
   const descriptionElementRef = React.useRef(null);
   React.useEffect(() => {
     if (open) {
@@ -169,13 +188,15 @@ export default function AgreementForm() {
     }
   }, [open]);
 
-  React.useEffect( () => 
-  {    
-    if (check.check1 && check.check2 && check.check3 && check.check4)
-    {
-        setError(false);
+  const descriptionElementRefFAQ = React.useRef(null);
+  React.useEffect(() => {
+    if (openFAQ) {
+      const { current: descriptionElementFAQ } = descriptionElementRefFAQ;
+      if (descriptionElementFAQ !== null) {
+        descriptionElementFAQ.focus();
+      }
     }
-  } , [check]);
+  }, [openFAQ]);
 
 
   const handleClickOpen = (scrollType) => () => {
@@ -183,9 +204,19 @@ export default function AgreementForm() {
     setScroll(scrollType);
   };
 
+  const handleClickOpenFAQ = (scrollType) => () => {
+    setOpenFAQ(true);
+    setScrollFAQ(scrollType);
+  };
+
   const handleClose = () => {
     setOpen(false);
   };
+
+  const handleCloseFAQ = () => {
+    setOpenFAQ(false);
+  };
+
 
   const checkClicked = (event, id) =>
   {
@@ -299,9 +330,9 @@ const getAgreeClicked = (event) => {
                 
                 <Grid item xs={12}  >
 
-                    <FormControlLabel
+                    <FormControlLabel style={{ fontSize: '1rem', textAlign:"justify" }}
                                 control={<Checkbox color="secondary" name="check4" checked={check.check4} onChange={(event => checkClicked(event,4))}  />}
-                                label={<span style={{ fontSize: '1rem' }}>{`I have not been in contact with someone suspected or known to have coronavirus`} 
+                                label={<span style={{ fontSize: '1rem', textAlign:"left" }}>{`I have not been in contact with someone suspected or known to have coronavirus`} 
                                 </span>}
                             />
                     </Grid>
@@ -351,6 +382,18 @@ const getAgreeClicked = (event) => {
                   >
              Privacy
          </Button>
+
+         <Button 
+                  variant="contained" 
+                  className={classes.faqButton} 
+                  color="secondary"
+                  startIcon={<LiveHelpIcon/>}
+                  onClick={handleClickOpenFAQ('paper')}
+                  onTouchTap={handleClickOpenFAQ('paper')} 
+                  >
+             FAQ
+         </Button>
+
          <Dialog
                         open={open}
                         onClose={handleClose}
@@ -381,6 +424,49 @@ const getAgreeClicked = (event) => {
                       
                         </DialogActions>
       </Dialog>
+
+      <Dialog
+                        open={openFAQ}
+                        onClose={handleCloseFAQ}
+                        scroll={scrollFAQ}
+                        aria-labelledby="scroll-dialog-title-FAQ"
+                        aria-describedby="scroll-dialog-description-FAQ"
+                      >
+                        <DialogTitle id="scroll-dialog-title">FAQ</DialogTitle>
+                        <DialogContent dividers={scroll === 'paper'}>
+                          <DialogContentText
+                            id="scroll-dialog-description-FAQ"
+                            ref={descriptionElementRefFAQ}
+                            tabIndex={-1}
+                          >
+                            <div style={{textAlign:"justify", padding:"10px"}}>
+                             
+                            {faq.map(element => (
+                              <React.Fragment>
+                                <p style={{borderLeft: "4px solid red", background: "#eee", fontWeight: "600", paddingLeft: "10px",paddingRight: "10px", lineHeight: "30px"}}>
+                                  <span style={{color: "red" , fontSize:"24px"}}> Q. </span>
+                                    {element.question} 
+                                </p>
+
+                                <p style={{borderLeft: "4px solid #999", background: "#fff", fontWeight: "400", color: "#555" ,paddingLeft: "10px",paddingRight: "30px", lineHeight: "50px"}}>
+                                  <span style={{color: "#555" , fontSize:"24px"}}> A. </span>
+                                    {element.answer} 
+                                </p>
+
+                              </React.Fragment>
+
+                            ))}
+
+                          </div>
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={handleCloseFAQ} color="primary">
+                            Close
+                          </Button>
+                      
+                        </DialogActions>
+          </Dialog>
 
 
 

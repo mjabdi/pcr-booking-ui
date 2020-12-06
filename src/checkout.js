@@ -40,6 +40,9 @@ import Backdrop from '@material-ui/core/Backdrop';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ResultsForm from './ResultsForm';
 
+import LiveHelpIcon from '@material-ui/icons/LiveHelp';
+import faq from './FAQ';
+
 
 function Copyright() {
   return (
@@ -120,7 +123,21 @@ const useStyles = makeStyles((theme) => ({
   },
 
   privacyButton: {
-    marginBottom : "20px"
+    marginBottom : "20px",
+    width: "115px"
+  },
+
+  faqButton: {
+    marginBottom : "20px",
+    marginLeft : "10px",
+    backgroundColor : "#2f942e",
+    "&:hover": {
+      background: "green",
+      color: "#fff"
+    },
+    textDecoration : "none !important",
+    width: "115px"
+
   },
 
   backdrop: {
@@ -161,14 +178,8 @@ export default function Checkout() {
   const [open, setOpen] = React.useState(false);
   const [scroll, setScroll] = React.useState('paper');
 
-  const handleClickOpen = (scrollType) => () => {
-    setOpen(true);
-    setScroll(scrollType);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-  };
+  const [openFAQ, setOpenFAQ] = React.useState(false);
+  const [scrollFAQ, setScrollFAQ] = React.useState('paper');
 
   const descriptionElementRef = React.useRef(null);
   React.useEffect(() => {
@@ -179,6 +190,35 @@ export default function Checkout() {
       }
     }
   }, [open]);
+
+  const descriptionElementRefFAQ = React.useRef(null);
+  React.useEffect(() => {
+    if (openFAQ) {
+      const { current: descriptionElementFAQ } = descriptionElementRefFAQ;
+      if (descriptionElementFAQ !== null) {
+        descriptionElementFAQ.focus();
+      }
+    }
+  }, [openFAQ]);
+
+
+  const handleClickOpen = (scrollType) => () => {
+    setOpen(true);
+    setScroll(scrollType);
+  };
+
+  const handleClickOpenFAQ = (scrollType) => () => {
+    setOpenFAQ(true);
+    setScrollFAQ(scrollType);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleCloseFAQ = () => {
+    setOpenFAQ(false);
+  };
 
 
 
@@ -420,6 +460,16 @@ export default function Checkout() {
                   >
              Privacy
          </Button>
+         <Button 
+                  variant="contained" 
+                  className={classes.faqButton} 
+                  color="secondary"
+                  startIcon={<LiveHelpIcon/>}
+                  onClick={handleClickOpenFAQ('paper')}
+                  onTouchTap={handleClickOpenFAQ('paper')} 
+                  >
+             FAQ
+         </Button>
          <Dialog
                         open={open}
                         onClose={handleClose}
@@ -450,6 +500,49 @@ export default function Checkout() {
                       
                         </DialogActions>
       </Dialog>
+
+      <Dialog
+                        open={openFAQ}
+                        onClose={handleCloseFAQ}
+                        scroll={scrollFAQ}
+                        aria-labelledby="scroll-dialog-title-FAQ"
+                        aria-describedby="scroll-dialog-description-FAQ"
+                      >
+                        <DialogTitle id="scroll-dialog-title">FAQ</DialogTitle>
+                        <DialogContent dividers={scroll === 'paper'}>
+                          <DialogContentText
+                            id="scroll-dialog-description-FAQ"
+                            ref={descriptionElementRefFAQ}
+                            tabIndex={-1}
+                          >
+                            <div style={{textAlign:"justify", padding:"10px"}}>
+                             
+                            {faq.map(element => (
+                              <React.Fragment>
+                                <p style={{borderLeft: "4px solid red", background: "#eee", fontWeight: "600", paddingLeft: "10px",paddingRight: "10px", lineHeight: "30px"}}>
+                                  <span style={{color: "red" , fontSize:"24px"}}> Q. </span>
+                                    {element.question} 
+                                </p>
+
+                                <p style={{borderLeft: "4px solid #999", background: "#fff", fontWeight: "400", color: "#555" ,paddingLeft: "10px",paddingRight: "30px", lineHeight: "50px"}}>
+                                  <span style={{color: "#555" , fontSize:"24px"}}> A. </span>
+                                    {element.answer} 
+                                </p>
+
+                              </React.Fragment>
+
+                            ))}
+
+                          </div>
+                          </DialogContentText>
+                        </DialogContent>
+                        <DialogActions>
+                          <Button onClick={handleCloseFAQ} color="primary">
+                            Close
+                          </Button>
+                      
+                        </DialogActions>
+          </Dialog>
 
       <Backdrop className={classes.backdrop} open={submiting} >
         <CircularProgress color="inherit" />

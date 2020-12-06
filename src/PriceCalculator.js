@@ -12,7 +12,7 @@ const calculatePrice = (person) =>
 
     if (person.antiBodyTest)
     {
-        price += 99;
+        price += (99 + 50);
     }
 
     return price;

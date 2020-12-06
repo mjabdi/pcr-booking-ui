@@ -21,7 +21,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import PersonsBox from './PersonsBox';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
 import AntiBodyComponent from './AntiBodyComponent';
-
+import { format, toDate } from 'date-fns-tz';
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -32,7 +32,19 @@ const useStyles = makeStyles((theme) => ({
     {
       marginTop : "20px",
       marginBottom : "20px",
-    }
+    },
+    Box:{
+      backgroundColor : "#f1f1f1",
+      padding: "10px",
+      //maxWidth: "300px",
+      borderRadius  : "10px",
+      boxShadow: "2px 4px #ddd",
+      marginTop: "5px",
+      marginBottom : "15px",
+      textAlign: "left"
+      
+    
+    },
 
   }));
 
@@ -49,6 +61,35 @@ export default function InformationForm() {
     const [title, setTitle] = React.useState(state.title ?? '');
 
     const [emailConfirmed, setEmailConfirmed] = React.useState(state.emailConfirmed ?? false);
+
+    const [passportNumber, setPassportNumber] = React.useState(state.passportNumber ?? '');
+    const [passportNumber2, setPassportNumber2] = React.useState(state.passportNumber2 ?? '');
+
+
+    const [certificate, setCertificate] = React.useState(state.certificate ?? false);
+
+    const certificateChanged = (event) => {
+      setCertificate(event.target.checked);
+      setState(state => ({...state, certificate: event.target.checked}));
+  };
+
+  const passportNumberChanged = (event) =>
+  {
+      setPassportNumber(event.target.value);
+      setState(state => ({...state, passportNumber : event.target.value }));
+      if (event.target.value && event.target.value.trim().length >= 6)
+      {
+        setState(state => ({...state, passportNumberError : false}));
+      }
+  }
+
+  const passportNumberChanged2 = (event) =>
+  {
+      setPassportNumber2(event.target.value);
+      setState(state => ({...state, passportNumber2 : event.target.value}));
+  }
+
+
 
     const emailConfirmedChanged = (event) => {
       setEmailConfirmed(event.target.checked);
@@ -70,6 +111,10 @@ export default function InformationForm() {
 
     const birthDateChanged = (date) =>
     {
+        date = new Date(date.getFullYear(), date.getMonth(), date.getDate(),0,0,0,0);
+          
+        // date = format(date, 'yyyy-MM-dd HH:mm:ss zzz', { timeZone: 'Europe/London' }) ; // 2014-10-25 10:46:20 GMT 00
+        // date = toDate(date);
         handleBirthDateChange(date);
         setState(state => ({...state, birthDate: date}));
         setState(state => ({...state, birthDateError : false}));
@@ -121,7 +166,7 @@ export default function InformationForm() {
 
     <React.Fragment>
 
-      <AntiBodyComponent/>
+      {/* <AntiBodyComponent/> */}
 
       <PersonsBox/>
 
@@ -239,8 +284,77 @@ export default function InformationForm() {
             control={<Checkbox className={classes.formControl} style={ {color: state.emailConfirmedError ? "red" : ''}}  color="secondary" name="emailConfirmCheckBox" checked={emailConfirmed} onChange={emailConfirmedChanged} />}
              label={<span style={{ fontSize: '0.8rem' }}>{`I confirm that this is a private email address to which I am happy for you to send my results.`} </span>}
           />
+          <p>{'* Please take care when entering your information, and double check that everything entered on this form is correct.'}</p>
         </Grid>
 
+        <Grid item xs={12}>
+               
+              
+               <div className={classes.Box}>
+
+                    <div className= {classes.Label}>
+                        Add to your Appointment...
+                    </div>
+
+                    <div className= {classes.CheckBox}>
+                    <FormControlLabel className={classes.formControl} 
+                  control={<Checkbox className={classes.formControl}  color="secondary" name="certificate" checked={certificate} onChange={certificateChanged} />}
+                  label={<span style={{ fontSize: '0.8rem' }}>{`I also require a medical certificate signed by a doctor declaring me 'fit-to-fly'.`} 
+                  
+                  <span  style={{ fontSize: '1rem', textDecoration: "italic" ,fontWeight:"600" ,color:"#333" }}>  + £50.00 </span> 
+
+                  </span>}
+                />
+              <div style={{paddingTop:"10px"}}>
+              {'If your requirements make any mention of a passport number, you will need a certificate. Laboratories do not note passport numbers on their results. If you are going to Spain, you need a certificate.'}
+              </div>
+        
+        {/* <div style={{marginTop: "10px"}}  hidden={!certificate} >
+             <TextField 
+                        error={state.passportNumberError ? true : false}
+                        required id="passport" label="Passport Number" 
+                        helperText="your passport number will be noted on your certificate" 
+                        fullWidth autoComplete="" 
+                        value = {passportNumber}
+                        onChange = {passportNumberChanged} 
+             />  
+        </div>
+        <div  style={{marginTop: "10px"}} hidden={!certificate} >
+             <TextField 
+                        // error={state.passportNumberError ? true : false}
+                        id="passport2" label="Second Passport Number (optional)" 
+                        helperText="your passport number will be noted on your certificate" 
+                        fullWidth autoComplete="" 
+                        value = {passportNumber2}
+                        onChange = {passportNumberChanged2} 
+             />  
+        </div>       */}
+              </div>
+
+
+              </div>
+        </Grid>
+
+        <Grid item xs={12} hidden={!certificate} >
+             <TextField 
+                        error={state.passportNumberError ? true : false}
+                        required id="passport" label="Passport Number" 
+                        helperText="your passport number will be noted on your certificate" 
+                        fullWidth autoComplete="" 
+                        value = {passportNumber}
+                        onChange = {passportNumberChanged} 
+             />  
+        </Grid>
+        <Grid item xs={12} hidden={!certificate} >
+             <TextField 
+                        // error={state.passportNumberError ? true : false}
+                        id="passport2" label="Second Passport Number (optional)" 
+                        helperText="your passport number will be noted on your certificate" 
+                        fullWidth autoComplete="" 
+                        value = {passportNumber2}
+                        onChange = {passportNumberChanged2} 
+             />  
+        </Grid>
      
       </Grid>
     

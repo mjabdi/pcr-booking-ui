@@ -58,6 +58,12 @@ export default function ValidateStep (state,setState, step)
         error = true;
       }
 
+      if (state.certificate && (!state.passportNumber || state.passportNumber.trim().length < 6))
+      {
+        setState(state => ({...state, passportNumberError : true}));
+        error = true;
+      }
+
     }
     else if (step === 3){
       ///validate Address Info
@@ -76,11 +82,11 @@ export default function ValidateStep (state,setState, step)
         setState(state => ({...state, addressError : true}));
         error = true;
       }    
-      if (state.certificate && (!state.passportNumber || state.passportNumber.trim().length < 6))
-      {
-        setState(state => ({...state, passportNumberError : true}));
-        error = true;
-      }
+      // if (state.certificate && (!state.passportNumber || state.passportNumber.trim().length < 6))
+      // {
+      //   setState(state => ({...state, passportNumberError : true}));
+      //   error = true;
+      // }
 
       if (!error){
         setState(state => ({...state, proceedToSubmit: false}));

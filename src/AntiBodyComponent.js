@@ -67,8 +67,9 @@ export default function AntiBodyComponent() {
         <div className= {classes.CheckBox}>
            <FormControlLabel className={classes.formControl} 
                   control={<Checkbox className={classes.formControl}  color="secondary" name="emailConfirmCheckBox" checked={antiBodyCheck} onChange={antiBodyCheckChanged} />}
-                  label={<span style={{ fontSize: '0.7rem' }}>{`COVID-19 Antibody Test (IgM & IgG)`} 
+                  label={<span style={{ fontSize: '0.8rem' }}>{`COVID-19 Antibody Test `} 
                   <span  style={{ fontSize: '0.8rem', textDecoration: "italic" ,fontWeight:"600" ,color:"#333" }}> £99.00 </span> </span> } />
+           <div hidden={!antiBodyCheck} style={{paddingLeft: "30px", fontWeight: "400", fontSize:"0.8"}}>* <strong> £50 </strong>phlebotomy charges apply</div>       
         </div>
 
 

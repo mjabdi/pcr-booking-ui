@@ -14,7 +14,24 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Skeleton from '@material-ui/lab/Skeleton';
 
+import { format, toDate } from 'date-fns-tz';
+// import { zonedTimeToUtc } from 'date-fns-tz';
 
+// class DateFnsTzUtils extends DateFnsUtils {
+//   format(date, formatString) {
+//     return formatTz(date, formatString, {
+//       timeZone: "America/New_York",
+//       locale: this.locale
+//     });
+//   }
+// }
+
+DateFnsUtils.prototype.format = function (date, formatString) {
+  return format(date, formatString, {
+          timeZone: "Europe/London",
+          locale: this.locale
+        });
+};
 
 const useStyles = makeStyles((theme) => ({
 
@@ -64,16 +81,21 @@ export default function DateForm() {
 
     },[]);
 
-    
-
     const dateChanged = (date) =>
     {
+        date = new Date(date.getFullYear(), date.getMonth(), date.getDate(),0,0,0,0);
+        
+        date = format(date, 'yyyy-MM-dd HH:mm:ss zzz', { timeZone: 'Europe/London' }) ; // 2014-10-25 10:46:20 GMT 00
+        date = toDate(date);
+        // console.log(date);
         handleDateChange(date);
         setState(state => ({...state, bookingDate: date}));
     }
 
-    const checkFullyBooked = (date) =>
+  const checkFullyBooked = (date) =>
   {
+    // date = new Date(date.getFullYear(), date.getMonth(), date.getDate(),0,0,0,0);
+    // date = format(date, 'yyyy-MM-dd HH:mm:ss zzz', { timeZone: 'Europe/London' }) ; // 2014-10-25 10:46:20 GMT 00
     var result = false;
 
     if (date.setHours(0,0,0,0) < firstAvailableDay.setHours(0,0,0,0))

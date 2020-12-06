@@ -1,31 +1,30 @@
-import TimeSlot from './../models/TimeSlot';
+
 import API from './api';
+import axiosRetry from 'axios-retry';
 
 export default class TimeService{
 
      static getFirstAvailableDate =  () =>
     {
+        axiosRetry( API, { retries: 3,  retryDelay: (retryCount) => {
+            return retryCount * 1000;
+          } });
         return API.get('/api/time/getfirstavaiabledate');
     }
 
-    // static dayIsBooked =  (date) =>
-    // {
-    //    /// check if this date is booked or not
-    //    return new Promise( (resolve, reject) =>
-    //    {
-    //         setTimeout(() => {
-    //             resolve(false);
-    //         }, 1000);
-    //    });
-    // }
-
     static getFullyBookedDates = () =>
     {        
+        axiosRetry( API, { retries: 3,  retryDelay: (retryCount) => {
+            return retryCount * 1000;
+          } });
        return API.get('/api/time/getfullybookeddays');
     }
 
     static getTimeSlots = (date) =>
     {
+        axiosRetry( API, { retries: 3,  retryDelay: (retryCount) => {
+            return retryCount * 1000;
+          } });
         return API.get(`/api/time/gettimeslots?date=${date}`);
     }
 

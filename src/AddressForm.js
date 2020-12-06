@@ -191,7 +191,13 @@ export default function AddressForm() {
                 onChange = {notesChanged} 
             />  
         </Grid>
-        <Grid item xs={12} className={classes.formControl} >
+
+        <Grid  item xs={12}>
+
+            <AntiBodyComponent/>
+        </Grid>
+
+        {/* <Grid item xs={12} className={classes.formControl} >
           <FormControlLabel className={classes.formControl} 
             control={<Checkbox className={classes.formControl}  color="secondary" name="certificate" checked={certificate} onChange={certificateChanged} />}
              label={<span style={{ fontSize: '0.8rem' }}>{`I also require a medical certificate signed by a doctor declaring me 'fit-to-fly'.`} 
@@ -223,7 +229,7 @@ export default function AddressForm() {
                         value = {passportNumber2}
                         onChange = {passportNumberChanged2} 
              />  
-        </Grid>
+        </Grid> */}
       </Grid>
     
       

@@ -39,9 +39,9 @@ export default function ResultsForm() {
   const [state, setState] = React.useContext(GlobalState);
   const classes = useStyles();
 
-  useEffect( () => {
-    console.log(state.finalResults);
-  }, [])
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, []);
 
   const AllError = (results) =>
   {
@@ -57,124 +57,143 @@ export default function ResultsForm() {
 
   return (
     <React.Fragment>
-    
-
-    {state.finalResults.length === 1 && state.finalResults[0].data.status === `OK` && (
-
-        <React.Fragment>
-        
-            <img className={classes.doneImage} src={doneImage} alt="Done image"/>
+      {state.finalResults.length === 1 &&
+        state.finalResults[0].data.status === `OK` && (
+          <React.Fragment>
+            <img
+              className={classes.doneImage}
+              src={doneImage}
+              alt="Done image"
+            />
 
             <Typography variant="h5" gutterBottom>
-                    Thank you for your Booking.
+              Thank you for your Booking.
             </Typography>
-            <br/>
+            <br />
             <Typography variant="subtitle1">
-                   Your booking number is <span className={classes.bold}>{`"${state.ref}"`}</span> . We have emailed your booking information, and will look forward to meet you at the clinic. 
+              Your booking number is{" "}
+              <span className={classes.bold}>{`"${state.ref}"`}</span> . We have
+              emailed your booking information, and will look forward to meet
+              you at the clinic.
             </Typography>
-
-        </React.Fragment>
-    )}
-
-    {state.finalResults.length === 1 && state.finalResults[0].data.status  === `FAILED` && (
-
-    <React.Fragment>
-
-        <img className={classes.errorImage} src={errorImage} alt="Error image"/>
-
-        <Typography variant="h5" gutterBottom>
-                Sorry, There is a Problem with your Booking.
-        </Typography>
-        <br/>
-        <Typography variant="subtitle1">
-            You have already booked for {`'${dateformat(state.bookingDate,'dddd, mmmm dS, yyyy')}'`}.
-            Every person can only book for one appointment per day. If you want to change your appointment time please follow the link we have emailed you before.
-        </Typography>
-
-    </React.Fragment>
-    )}
-
-{state.finalResults.length > 1 &&  (
-
-
-
-      <React.Fragment>
-
-        { AllError(state.finalResults) && (
-
-                <React.Fragment>
-
-                    <img className={classes.errorImage} src={errorImage} alt="Error image"/>
-
-                    <Typography variant="h5" gutterBottom>
-                            Sorry, There is a Problem with your Booking.
-                    </Typography>
-                    <br/>
-                    <Typography variant="subtitle1">
-                        You have already booked for {`'${dateformat(state.bookingDate,'dddd, mmmm dS, yyyy')}'`}.
-                        Every person can only book for one appointment per day. If you want to change your appointment time please follow the link we have emailed you before.
-                    </Typography>
-
-                </React.Fragment>
+          </React.Fragment>
         )}
 
-        { !AllError(state.finalResults) && (
+      {state.finalResults.length === 1 &&
+        state.finalResults[0].data.status === `FAILED` && (
+          <React.Fragment>
+            <img
+              className={classes.errorImage}
+              src={errorImage}
+              alt="Error image"
+            />
 
-                <React.Fragment>
-                        
-                <img className={classes.doneImage} src={doneImage} alt="Done image"/>
+            <Typography variant="h5" gutterBottom>
+              Sorry, There is a Problem with your Booking.
+            </Typography>
+            <br />
 
-                <Typography variant="h5" gutterBottom>
-                        Thank you for your Booking.
-                </Typography>
-                <br/>
-                <Typography variant="subtitle1">
-                    Your booking number is <span className={classes.bold}>{`"${state.ref}"`}</span> . We have emailed your booking information, and will look forward to meet you at the clinic. 
-                </Typography>
+            {state.finalResults[0].data.error === "FullTime" && (
+              <Typography variant="subtitle1">
+                Please check your system time, make sure your timezone is set to
+                Europe/London.
+              </Typography>
+            )}
 
-                </React.Fragment>
+            {state.finalResults[0].data.error !== "FullTime" && (
+              <Typography variant="subtitle1">
+                You have already booked for{" "}
+                {`'${dateformat(state.bookingDate, "dddd, mmmm dS, yyyy")}'`}.
+                Every person can only book for one appointment per day. If you
+                want to change your appointment time please follow the link we
+                have emailed you before.
+              </Typography>
+            )}
+          </React.Fragment>
         )}
 
-
-    {state.finalResults.map( item => (
-
+      {state.finalResults.length > 1 && (
         <React.Fragment>
-            {item.data.status === 'OK' && (
+          {AllError(state.finalResults) && (
+            <React.Fragment>
+              <img
+                className={classes.errorImage}
+                src={errorImage}
+                alt="Error image"
+              />
+
+              <Typography variant="h5" gutterBottom>
+                Sorry, There is a Problem with your Booking.
+              </Typography>
+              <br />
+
+              {state.finalResults[0].data.error === "FullTime" && (
+                <Typography variant="subtitle1">
+                  Please check your system time, make sure your timezone is set
+                  to Europe/London.
+                </Typography>
+              )}
+
+              {state.finalResults[0].data.error !== "FullTime" && (
+                <Typography variant="subtitle1">
+                  You have already booked for{" "}
+                  {`'${dateformat(state.bookingDate, "dddd, mmmm dS, yyyy")}'`}.
+                  Every person can only book for one appointment per day. If you
+                  want to change your appointment time please follow the link we
+                  have emailed you before.
+                </Typography>
+              )}
+
+              
+            </React.Fragment>
+          )}
+
+          {!AllError(state.finalResults) && (
+            <React.Fragment>
+              <img
+                className={classes.doneImage}
+                src={doneImage}
+                alt="Done image"
+              />
+
+              <Typography variant="h5" gutterBottom>
+                Thank you for your Booking.
+              </Typography>
+              <br />
+              <Typography variant="subtitle1">
+                Your booking number is{" "}
+                <span className={classes.bold}>{`"${state.ref}"`}</span> . We
+                have emailed your booking information, and will look forward to
+                meet you at the clinic.
+              </Typography>
+            </React.Fragment>
+          )}
+
+          {state.finalResults.map((item) => (
+            <React.Fragment>
+              {item.data.status === "OK" && (
                 <React.Fragment>
-                
-                <div style={{marginTop: "5px", marginBottom: "5px"}}>
+                  <div style={{ marginTop: "5px", marginBottom: "5px" }}>
                     <Alert severity="success">
-                        {`${item.data.person.forename} ${item.data.person.surname} - Successfully Booked!` }
+                      {`${item.data.person.forename} ${item.data.person.surname} - Successfully Booked!`}
                     </Alert>
-                </div>
-           
+                  </div>
                 </React.Fragment>
-            )}
+              )}
 
-        {item.data.status === 'FAILED' && (
+              {item.data.status === "FAILED" && (
                 <React.Fragment>
-                
-                <div style={{marginTop: "5px", marginBottom: "5px"}}>
+                  <div style={{ marginTop: "5px", marginBottom: "5px" }}>
                     <Alert severity="error">
-                          {`${item.data.person.forename} ${item.data.person.surname} - Booking Failed! ( has already booked for that day!)` }
+                      {`${item.data.person.forename} ${item.data.person.surname} - Booking Failed! ( has already booked for that day!)`}
                     </Alert>
-                </div>
-                             
+                  </div>
                 </React.Fragment>
-            )}
-
+              )}
+            </React.Fragment>
+          ))}
         </React.Fragment>
-    ))
-      
-    }
-      
-      </React.Fragment>
-
-
-)}
-
+      )}
     </React.Fragment>
-
-
   );
 }

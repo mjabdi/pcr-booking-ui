@@ -42,6 +42,7 @@ import ResultsForm from './ResultsForm';
 
 import LiveHelpIcon from '@material-ui/icons/LiveHelp';
 import faq from './FAQ';
+import dateformat from 'dateformat';
 
 
 function Copyright() {
@@ -260,7 +261,7 @@ export default function Checkout() {
           title: state.title,
           firstname: state.firstname,
           lastname: state.lastname,
-          birthDate: state.birthDate,
+          birthDate:  dateformat(new Date(state.birthDate.toUTCString().slice(0, -4)),'yyyy-mm-dd'),
           email: state.email,
           phone: state.phone,
           postCode: state.postCode,
@@ -272,12 +273,12 @@ export default function Checkout() {
           antiBodyTest: state.antiBodyTest ?? false
         };
     
-        const promise = BookService.bookAppointment({...personInfo, bookingDate: state.bookingDate, bookingTime: state.bookingTime, bookingRef: ref, referrer: window.location.pathname});
+        const promise = BookService.bookAppointment({...personInfo, bookingDate:  dateformat(new Date(state.bookingDate.toUTCString().slice(0, -4)),'yyyy-mm-dd'), bookingTime: state.bookingTime, bookingRef: ref, referrer: window.location.pathname});
         promiseArray.push(promise);
       }
   
       for (var i=0 ; i < state.persons?.length; i++){
-        promiseArray.push(BookService.bookAppointment({...state.persons[i],bookingDate: state.bookingDate, bookingTime: state.bookingTime, bookingRef: ref, referrer: window.location.pathname}));
+        promiseArray.push(BookService.bookAppointment({...state.persons[i],bookingDate: dateformat(new Date(state.bookingDate.toUTCString().slice(0, -4)),'yyyy-mm-dd'), bookingTime: state.bookingTime, bookingRef: ref, referrer: window.location.pathname}));
       }
       
       Promise.all(promiseArray).then( (values) => {

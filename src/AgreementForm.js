@@ -34,6 +34,7 @@ import { Checkbox, FormControlLabel, Grid } from '@material-ui/core';
 
 import LiveHelpIcon from '@material-ui/icons/LiveHelp';
 import faq from './FAQ';
+import { useEffect } from 'react';
 
 
 function Copyright() {
@@ -177,6 +178,11 @@ export default function AgreementForm() {
 
   const [openFAQ, setOpenFAQ] = React.useState(false);
   const [scrollFAQ, setScrollFAQ] = React.useState('paper');
+
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, []);
 
   const descriptionElementRef = React.useRef(null);
   React.useEffect(() => {

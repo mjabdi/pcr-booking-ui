@@ -16,6 +16,7 @@ import { Button, Checkbox, FormControlLabel } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import Icon from '@material-ui/core/Icon';
+import dateformat from 'dateformat';
 
 import {calculatePrice, calculateTotalPrice} from './PriceCalculator';
 
@@ -139,6 +140,10 @@ export default function ReviewForm() {
 
     const [expanded, setExpanded] = React.useState('panel10');
 
+    useEffect(() => {
+      window.scrollTo(0, 0)
+    }, []);
+
     const dataConfirmedChanged = (event) =>
     {
       setState(state => ({...state, dataConfirmed : event.target.checked }));
@@ -181,7 +186,7 @@ export default function ReviewForm() {
           title: state.title,
           firstname: state.firstname,
           lastname: state.lastname,
-          birthDate: state.birthDate,
+          birthDate: dateformat(new Date(state.birthDate.toUTCString().slice(0, -4)),'yyyy-mm-dd'),
           email: state.email,
           phone: state.phone,
           postCode: state.postCode,
@@ -366,9 +371,9 @@ export default function ReviewForm() {
 
                     <div className={classes.AddAnother}>
                           <Button 
-                                  // variant="outlined"
+                                  variant="contained"
                                   startIcon={<PersonAddIcon />}
-                                  color="primary"
+                                  color="secondary"
                                   onTouchTap = {addAnotherPerson} 
                                   onClick={addAnotherPerson} className={classes.button}>
                             Add Another Person
@@ -384,7 +389,7 @@ export default function ReviewForm() {
               <ul className={classes.ul}>
                 <li className={classes.li}>
                 <FontAwesomeIcon icon={faCalendarAlt} className={classes.icon} />
-                    {dateFormat(new Date(state.bookingDate),'dd-mmmm-yyyy')}
+                    { dateformat(new Date(state.bookingDate.toUTCString().slice(0, -4)),'yyyy-mm-dd')}
                 </li>
                 <li className={classes.li}>
                 <FontAwesomeIcon icon={faHourglassHalf} className={classes.icon} />

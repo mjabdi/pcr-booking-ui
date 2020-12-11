@@ -44,6 +44,9 @@ export default function AddressForm() {
 
     const [certificate, setCertificate] = React.useState(state.certificate ?? false);
 
+    useEffect(() => {
+      window.scrollTo(0, 0)
+    }, []);
 
 
     useEffect( () => {

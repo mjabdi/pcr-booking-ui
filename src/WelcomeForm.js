@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
@@ -174,6 +174,11 @@ export default function WelcomeForm() {
   const [scrollFAQ, setScrollFAQ] = React.useState('paper');
 
   const descriptionElementRef = React.useRef(null);
+
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, []);
+
   React.useEffect(() => {
     if (open) {
       const { current: descriptionElement } = descriptionElementRef;

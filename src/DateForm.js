@@ -2,9 +2,11 @@ import React, { useEffect } from 'react';
 import Typography from '@material-ui/core/Typography';
 import {
     DatePicker,
-    MuiPickersUtilsProvider
+    MuiPickersUtilsProvider,
   } from '@material-ui/pickers';
+
 import DateFnsUtils from '@date-io/date-fns';
+
 import GlobalState from './GlobalState';
 import {BrowserView, MobileView} from 'react-device-detect';
 
@@ -14,24 +16,16 @@ import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import Skeleton from '@material-ui/lab/Skeleton';
 
-import { format, toDate } from 'date-fns-tz';
-// import { zonedTimeToUtc } from 'date-fns-tz';
 
-// class DateFnsTzUtils extends DateFnsUtils {
-//   format(date, formatString) {
-//     return formatTz(date, formatString, {
-//       timeZone: "America/New_York",
-//       locale: this.locale
-//     });
-//   }
-// }
+import { format, addMinutes } from 'date-fns';
 
-DateFnsUtils.prototype.format = function (date, formatString) {
-  return format(date, formatString, {
-          timeZone: "Europe/London",
-          locale: this.locale
-        });
-};
+class UTCUtils extends DateFnsUtils {
+  format(date, formatString) {
+    return format(addMinutes(date, date.getTimezoneOffset()), formatString);
+  }
+}
+
+
 
 const useStyles = makeStyles((theme) => ({
 
@@ -48,12 +42,16 @@ export default function DateForm() {
    const classes = useStyles();
 
     const [state, setState] = React.useContext(GlobalState);
-    const [bookingDate, handleDateChange] = React.useState(state.bookingDate ?? new Date());
+    const [bookingDate, setBookingDate] = React.useState(state.bookingDate ?? new Date());
 
     const [firstAvailableDay, setFirstAvailableDay] = React.useState(new Date());
     const [fullyBookedDays, setFullyBookedDays] = React.useState(null);
 
     const [dataLoaded, setDataLoaded] =  React.useState(false);
+
+    useEffect(() => {
+      window.scrollTo(0, 0)
+    }, []);
 
     const LoadData = () => {
 
@@ -77,18 +75,24 @@ export default function DateForm() {
 
     useEffect(() => {
 
+      dateChanged(state.bookingDate ?? new Date());
+
       LoadData();
 
     },[]);
 
     const dateChanged = (date) =>
     {
-        date = new Date(date.getFullYear(), date.getMonth(), date.getDate(),0,0,0,0);
+        //date = new Date(date.getFullYear(), date.getMonth(), date.getDate(),0,0,0,0);
+        // const offset = parseInt(date.getTimezoneOffset());
+        // console.log(offset);
+
+        // date = new Date(date.getTime() + (offset * 60 * 1000));
         
-        date = format(date, 'yyyy-MM-dd HH:mm:ss zzz', { timeZone: 'Europe/London' }) ; // 2014-10-25 10:46:20 GMT 00
-        date = toDate(date);
-        // console.log(date);
-        handleDateChange(date);
+        // date = format(date, 'yyyy-MM-dd HH:mm:ss zzz', { timeZone: 'Europe/London' }) ; // 2014-10-25 10:46:20 GMT 00
+        // date = toDate(date);
+        console.log(date);
+        setBookingDate(date);
         setState(state => ({...state, bookingDate: date}));
     }
 
@@ -143,7 +147,7 @@ export default function DateForm() {
                   >
 
                         <BrowserView>
-                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <MuiPickersUtilsProvider utils={UTCUtils}>
                                     <DatePicker autoOk 
                                                 disablePast="true" 
                                                 openTo="date"
@@ -158,7 +162,7 @@ export default function DateForm() {
                         </BrowserView>
 
                         <MobileView>
-                            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                            <MuiPickersUtilsProvider utils={UTCUtils}>
                                         <DatePicker autoOk 
                                                     disablePast="true" 
                                                     openTo="date"

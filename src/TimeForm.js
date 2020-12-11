@@ -101,12 +101,16 @@ export default function TimeForm() {
 
     const [timeSlots, setTimeSlots] = React.useState(emptyTimeSlots);
 
+    useEffect(() => {
+      window.scrollTo(0, 0)
+    }, []);
+
     const LoadData = (date) => {
 
       setTimeSlots(emptyTimeSlots);
       setDataLoaded(false);
 
-      const dateStr = dateformat(date,'yyyy-mm-dd');
+      // const dateStr = dateformat(date,'yyyy-mm-dd');
 
       const promise1 = TimeService.getTimeSlots(date);
   
@@ -114,21 +118,21 @@ export default function TimeForm() {
   
         const timeSlotsTmp = values[0].data;
 
-        if (isWeekend(date) && dateStr !== '2020-12-27')
-        {
-          for (var i=0 ; i < timeSlotsTmp.length ; i++)
-          {
-            if (parseInt(timeSlotsTmp[i].time.substr(0,2)) < 10 && timeSlotsTmp[i].time.indexOf('AM') > 0)
-            {
-              timeSlotsTmp[i].available = false;
-            }
+        // if (isWeekend(date) && dateStr !== '2020-12-27')
+        // {
+        //   for (var i=0 ; i < timeSlotsTmp.length ; i++)
+        //   {
+        //     if (parseInt(timeSlotsTmp[i].time.substr(0,2)) < 10 && timeSlotsTmp[i].time.indexOf('AM') > 0)
+        //     {
+        //       timeSlotsTmp[i].available = false;
+        //     }
   
-            if (parseInt(timeSlotsTmp[i].time.substr(0,2)) > 1 && parseInt(timeSlotsTmp[i].time.substr(0,2)) < 12 &&timeSlotsTmp[i].time.indexOf('PM') > 0)
-            {
-              timeSlotsTmp[i].available = false;
-            }
-          }
-        }
+        //     if (parseInt(timeSlotsTmp[i].time.substr(0,2)) > 1 && parseInt(timeSlotsTmp[i].time.substr(0,2)) < 12 &&timeSlotsTmp[i].time.indexOf('PM') > 0)
+        //     {
+        //       timeSlotsTmp[i].available = false;
+        //     }
+        //   }
+        // }
 
 
         setTimeSlots(timeSlotsTmp);

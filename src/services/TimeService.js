@@ -1,6 +1,7 @@
 
 import API from './api';
 import axiosRetry from 'axios-retry';
+import dateformat from 'dateformat';
 
 export default class TimeService{
 
@@ -25,7 +26,9 @@ export default class TimeService{
         axiosRetry( API, { retries: 3,  retryDelay: (retryCount) => {
             return retryCount * 1000;
           } });
-        return API.get(`/api/time/gettimeslots?date=${date}`);
+
+        const date_utc =  dateformat(new Date(date.toUTCString().slice(0, -4)),'yyyy-mm-dd');
+        return API.get(`/api/time/gettimeslots?date=${date_utc}`);
     }
 
 

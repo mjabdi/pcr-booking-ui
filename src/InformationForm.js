@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
@@ -68,6 +68,10 @@ export default function InformationForm() {
 
     const [certificate, setCertificate] = React.useState(state.certificate ?? false);
 
+    useEffect(() => {
+      window.scrollTo(0, 0)
+    }, []);
+
     const certificateChanged = (event) => {
       setCertificate(event.target.checked);
       setState(state => ({...state, certificate: event.target.checked}));
@@ -111,10 +115,14 @@ export default function InformationForm() {
 
     const birthDateChanged = (date) =>
     {
+      if (date)
+      {
         date = new Date(date.getFullYear(), date.getMonth(), date.getDate(),0,0,0,0);
-          
         // date = format(date, 'yyyy-MM-dd HH:mm:ss zzz', { timeZone: 'Europe/London' }) ; // 2014-10-25 10:46:20 GMT 00
         // date = toDate(date);
+      }
+          
+
         handleBirthDateChange(date);
         setState(state => ({...state, birthDate: date}));
         setState(state => ({...state, birthDateError : false}));

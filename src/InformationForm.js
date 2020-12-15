@@ -21,7 +21,31 @@ import DateFnsUtils from '@date-io/date-fns';
 import PersonsBox from './PersonsBox';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
 import AntiBodyComponent from './AntiBodyComponent';
-import { format, toDate } from 'date-fns-tz';
+
+
+import { format, addMinutes } from 'date-fns';
+
+
+import dateformat from 'dateformat';
+import { enGB, } from 'date-fns/locale'
+
+class UTCUtils extends DateFnsUtils {
+ 
+  locale = enGB;
+  // format(date, formatString) {
+  //   return format(new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000 ), formatString,enGB);
+  // }
+
+  // getCalendarHeaderText(date){
+  //   return dateformat(date, 'mmmm yyyy');
+  // }
+
+  // getDayText(date)
+  // {
+  //   return dateformat(date, 'd');
+  // }
+
+}
 
 const useStyles = makeStyles((theme) => ({
     formControl: {
@@ -118,8 +142,10 @@ export default function InformationForm() {
       if (date)
       {
         date = new Date(date.getFullYear(), date.getMonth(), date.getDate(),0,0,0,0);
-        // date = format(date, 'yyyy-MM-dd HH:mm:ss zzz', { timeZone: 'Europe/London' }) ; // 2014-10-25 10:46:20 GMT 00
-        // date = toDate(date);
+      
+
+        date = new Date(date.getTime() - (date.getTimezoneOffset() * 60 * 1000));
+        console.log(date);
       }
           
 
@@ -249,7 +275,7 @@ export default function InformationForm() {
         />  
         </Grid>
         <Grid item xs={12} md={12}>
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
+        <MuiPickersUtilsProvider utils={UTCUtils} locale={enGB}>
             <KeyboardDatePicker  
                         error={state.birthDateError ? true : false}
                         autoOk
@@ -348,7 +374,7 @@ export default function InformationForm() {
                         error={state.passportNumberError ? true : false}
                         required id="passport" label="Passport Number" 
                         helperText="your passport number will be noted on your certificate" 
-                        fullWidth autoComplete="" 
+                        fullWidth autoComplete="none" 
                         value = {passportNumber}
                         onChange = {passportNumberChanged} 
              />  
@@ -358,7 +384,7 @@ export default function InformationForm() {
                         // error={state.passportNumberError ? true : false}
                         id="passport2" label="Second Passport Number (optional)" 
                         helperText="your passport number will be noted on your certificate" 
-                        fullWidth autoComplete="" 
+                        fullWidth autoComplete="none"  
                         value = {passportNumber2}
                         onChange = {passportNumberChanged2} 
              />  

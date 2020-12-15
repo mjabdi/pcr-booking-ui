@@ -4,6 +4,14 @@ export default function ValidateStep (state,setState, step)
   {
     var error = false;
 
+    if (step === 0)
+    {
+      if (!state.bookingDate || !state.bookingDate.getTime())
+      {
+        setState(state => ({...state, bookingDateError : true}));
+        error = true;
+      }
+    }
     if (step === 1)
     {
       /// Validate time
@@ -35,7 +43,7 @@ export default function ValidateStep (state,setState, step)
         setState(state => ({...state, lastnameError : true}));
         error = true;
       }
-      if (!state.birthDate)
+      if (!state.birthDate || !state.birthDate.getTime())
       {
         setState(state => ({...state, birthDateError : true}));
         error = true;

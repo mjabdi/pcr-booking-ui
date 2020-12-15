@@ -19,12 +19,28 @@ import Skeleton from '@material-ui/lab/Skeleton';
 
 import { format, addMinutes } from 'date-fns';
 
-class UTCUtils extends DateFnsUtils {
-  format(date, formatString) {
-    return format(addMinutes(date, date.getTimezoneOffset()), formatString);
-  }
-}
+import { enGB, } from 'date-fns/locale'
 
+
+import dateformat from 'dateformat';
+
+class UTCUtils extends DateFnsUtils {
+ 
+  locale = enGB;
+  // format(date, formatString) {
+  //   return format(new Date(date.getTime() + date.getTimezoneOffset() * 60 * 1000 ), formatString,enGB);
+  // }
+
+  // getCalendarHeaderText(date){
+  //   return dateformat(date, 'mmmm yyyy');
+  // }
+
+  // getDayText(date)
+  // {
+  //   return dateformat(date, 'd');
+  // }
+
+}
 
 
 const useStyles = makeStyles((theme) => ({
@@ -42,10 +58,12 @@ export default function DateForm() {
    const classes = useStyles();
 
     const [state, setState] = React.useContext(GlobalState);
-    const [bookingDate, setBookingDate] = React.useState(state.bookingDate ?? new Date());
-
-    const [firstAvailableDay, setFirstAvailableDay] = React.useState(new Date());
+  
+    const [firstAvailableDay, setFirstAvailableDay] = React.useState(null);
     const [fullyBookedDays, setFullyBookedDays] = React.useState(null);
+
+    const [bookingDate, setBookingDate] = React.useState(state.bookingDate);
+
 
     const [dataLoaded, setDataLoaded] =  React.useState(false);
 
@@ -59,8 +77,17 @@ export default function DateForm() {
       const promise2 = TimeService.getFullyBookedDates();
 
       Promise.all([promise1, promise2]).then( (values) => {
+        let firstday = new Date((values[0].data).date);
+        firstday.setHours(0,0,0,0);
 
-        setFirstAvailableDay(new Date((values[0].data).date));
+        firstday = new Date(firstday.getTime() - firstday.getTimezoneOffset() * 60 * 1000);
+
+        setFirstAvailableDay(firstday);
+        if (!state.bookingDate)
+        {
+          dateChanged(firstday);
+        }
+       
         setFullyBookedDays(values[1].data);
 
         setDataLoaded(true);
@@ -74,20 +101,20 @@ export default function DateForm() {
 
 
     useEffect(() => {
-
-      dateChanged(state.bookingDate ?? new Date());
-
       LoadData();
 
     },[]);
 
+  
+
     const dateChanged = (date) =>
     {
-        //date = new Date(date.getFullYear(), date.getMonth(), date.getDate(),0,0,0,0);
+        date = new Date(date.getFullYear(), date.getMonth(), date.getDate(),0,0,0,0);
         // const offset = parseInt(date.getTimezoneOffset());
         // console.log(offset);
 
-        // date = new Date(date.getTime() + (offset * 60 * 1000));
+        date = new Date(date.getTime() - (date.getTimezoneOffset() * 60 * 1000));
+        // date = new Date(date.getFullYear(), date.getMonth(), date.getDate(),0,0,0,0);
         
         // date = format(date, 'yyyy-MM-dd HH:mm:ss zzz', { timeZone: 'Europe/London' }) ; // 2014-10-25 10:46:20 GMT 00
         // date = toDate(date);
@@ -98,22 +125,18 @@ export default function DateForm() {
 
   const checkFullyBooked = (date) =>
   {
-    // date = new Date(date.getFullYear(), date.getMonth(), date.getDate(),0,0,0,0);
-    // date = format(date, 'yyyy-MM-dd HH:mm:ss zzz', { timeZone: 'Europe/London' }) ; // 2014-10-25 10:46:20 GMT 00
     var result = false;
 
-    if (date.setHours(0,0,0,0) < firstAvailableDay.setHours(0,0,0,0))
+    if (dateformat(date,'yyyy-mm-dd') < dateformat(firstAvailableDay,'yyyy-mm-dd'))
     {
-       result = true;
+       return true;
     }
 
     else if (fullyBookedDays && fullyBookedDays.length > 0)
     {
-     
-
       for (var i=0 ; i < fullyBookedDays.length ; i++ )
       {
-        if (new Date(fullyBookedDays[i]).setHours(0,0,0,0) === date.setHours(0,0,0,0))
+        if (dateformat(new Date(fullyBookedDays[i]), 'yyyy-mm-dd') === dateformat(date,'yyyy-mm-dd'))
         {
           result = true;
         }
@@ -135,7 +158,7 @@ export default function DateForm() {
                     Pick a Date
                 </Typography>
 
-        {dataLoaded ?  (
+        {(dataLoaded && firstAvailableDay) ?  (
             
                 <React.Fragment>
 
@@ -147,9 +170,9 @@ export default function DateForm() {
                   >
 
                         <BrowserView>
-                            <MuiPickersUtilsProvider utils={UTCUtils}>
+                            <MuiPickersUtilsProvider utils={UTCUtils} locale={enGB}>
                                     <DatePicker autoOk 
-                                                disablePast="true" 
+                                                disablePast={true} 
                                                 openTo="date"
                                                 orientation="landscape" 
                                                 variant="static" 
@@ -162,9 +185,9 @@ export default function DateForm() {
                         </BrowserView>
 
                         <MobileView>
-                            <MuiPickersUtilsProvider utils={UTCUtils}>
+                            <MuiPickersUtilsProvider utils={UTCUtils} locale={enGB}>
                                         <DatePicker autoOk 
-                                                    disablePast="true" 
+                                                    disablePast={true} 
                                                     openTo="date"
                                                     variant="static" 
                                                     fullWidth

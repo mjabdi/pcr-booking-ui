@@ -240,6 +240,9 @@ export default function AgreementForm() {
         case 4: 
             setCheck({...check, check4:event.target.checked});
             break;
+        case 5: 
+            setCheck({...check, check5:event.target.checked});
+        break;    
         default:
                 break;
 
@@ -254,7 +257,7 @@ export default function AgreementForm() {
 
 
 const getAgreeClicked = (event) => {
-    if (check.check1 && check.check2 && check.check3 && check.check4)
+    if (check.check1 && check.check2 && check.check3 && check.check4 && check.check5)
     {
         setState(state => ({...state, agreed: true}));
     }
@@ -263,6 +266,13 @@ const getAgreeClicked = (event) => {
         setError(true);
     }
 }
+
+useEffect( () => {
+  if (check.check1 && check.check2 && check.check3 && check.check4 && check.check5)
+  {
+    setError(false);
+  }
+}, [check]);
 
   return (
     <React.Fragment>
@@ -343,7 +353,22 @@ const getAgreeClicked = (event) => {
                             />
                     </Grid>
 
+                    <Grid item xs={12}  >
+
+                        <FormControlLabel style={{ fontSize: '1rem', textAlign:"justify" }}
+                                    control={<Checkbox color="secondary" name="check5" checked={check.check5} onChange={(event => checkClicked(event,5))}  />}
+                                    label={<span style={{ fontSize: '1rem', textAlign:"left" }}>{`I confirm that this appointment is for a Fit to Fly PCR Test, not for the Test to Release scheme.`} 
+                                    </span>}
+                                />
+                        </Grid>
+
                 </Grid>
+
+             
+
+                
+
+               
 
             <p className={isMobile ? classes.textContentMobile : classes.textContent}>
                  If you cannot confirm all the points stated above, you must not proceed any further and must self-isolate for the next 14 days. Please click the box to agree to these terms.

@@ -9,6 +9,7 @@ import AccordionSummary from '@material-ui/core/AccordionSummary';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import dateFormat from 'dateformat';
 import {calculatePrice} from './PriceCalculator';
+import { FormatDateFromString } from './DateFormatter';
 
 const useStyles = makeStyles((theme) => ({
   box: {
@@ -161,7 +162,7 @@ export default function PersonsBox() {
                                 <span className={classes.infoTitle}>Email</span> <span className={classes.infoData}>{person.email}</span>   
                             </li>
                             <li className={classes.li}>
-                                <span className={classes.infoTitle}>D.O.B</span> <span className={classes.infoData}>{dateFormat(new Date(person.birthDate),'dd mmm yyyy') }</span>  
+                                <span className={classes.infoTitle}>D.O.B</span> <span className={classes.infoData}>{FormatDateFromString(person.birthDate)}</span>  
                             </li>
                             <li className={classes.li}>
                                 <span className={classes.infoTitle}>Telephone</span> <span className={classes.infoData}>{person.phone}</span>  

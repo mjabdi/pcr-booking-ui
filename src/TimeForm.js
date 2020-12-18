@@ -191,6 +191,18 @@ export default function TimeForm() {
 
             <React.Fragment>
 
+              {checkFullyBooked(timeSlots) && (
+
+                <React.Fragment>
+                  <div style={{fontSize:"1.2rem", paddingTop:"10px", paddingBottom:"10px", color:"#db0000" , fontWeight: "500", background:"#fff5f5"}}>
+                     Sorry this day is already fully booked! 
+                     <br/>Please choose an alternative day.
+                  </div>
+                   
+                </React.Fragment>
+
+              )}
+
               <BrowserView>
                   <div className={classes.root}>
                             <GridList cellHeight={60} className={classes.gridList} cols={4}>
@@ -254,7 +266,15 @@ export default function TimeForm() {
   );
 }
 
-const checkFullyBooked = (time) =>
+const checkFullyBooked = (timeSlots) =>
 {
-    return false;
+    let available = false;
+    timeSlots.forEach(time => {
+      if (time.available)
+      {
+        available = true;
+      }
+    });
+
+    return !available;
 }

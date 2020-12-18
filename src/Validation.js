@@ -43,7 +43,7 @@ export default function ValidateStep (state,setState, step)
         setState(state => ({...state, lastnameError : true}));
         error = true;
       }
-      if (!state.birthDate || !state.birthDate.getTime())
+      if (!state.birthDate || state.birthDate.length !== 10)
       {
         setState(state => ({...state, birthDateError : true}));
         error = true;

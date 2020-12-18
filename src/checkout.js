@@ -261,7 +261,7 @@ export default function Checkout() {
           title: state.title,
           firstname: state.firstname,
           lastname: state.lastname,
-          birthDate:  dateformat(new Date(state.birthDate.toUTCString().slice(0, -4)),'yyyy-mm-dd'),
+          birthDate: state.birthDate,
           email: state.email,
           phone: state.phone,
           postCode: state.postCode,

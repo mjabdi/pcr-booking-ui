@@ -28,6 +28,7 @@ import { format, addMinutes } from 'date-fns';
 
 import dateformat from 'dateformat';
 import { enGB, } from 'date-fns/locale'
+import DateField from './DateField';
 
 class UTCUtils extends DateFnsUtils {
  
@@ -75,7 +76,7 @@ const useStyles = makeStyles((theme) => ({
 export default function InformationForm() {
     const classes = useStyles();
     const [state, setState] = React.useContext(GlobalState);
-    const [birthDate, handleBirthDateChange] = React.useState(state.birthDate ?? null);
+    const [birthDate, setBirthDate] = React.useState(state.birthDate ?? null);
     const [firstname, setFirstname] = React.useState(state.firstname ?? '');
     const [lastname, setLastname] = React.useState(state.lastname ?? '');
     const [email, setEmail] = React.useState(state.email ?? '');
@@ -137,20 +138,22 @@ export default function InformationForm() {
             setState(state => ({...state, genderError : false}));
         };
 
-    const birthDateChanged = (date) =>
+    const birthDateChanged = (dateStr) =>
     {
-      if (date)
-      {
-        date = new Date(date.getFullYear(), date.getMonth(), date.getDate(),0,0,0,0);
+      // if (date)
+      // {
+      //   date = new Date(date.getFullYear(), date.getMonth(), date.getDate(),0,0,0,0);
       
 
-        date = new Date(date.getTime() - (date.getTimezoneOffset() * 60 * 1000));
-        console.log(date);
-      }
-          
+      //   date = new Date(date.getTime() - (date.getTimezoneOffset() * 60 * 1000));
+      //   console.log(date);
+      // }
+        
+        console.log(dateStr);
 
-        handleBirthDateChange(date);
-        setState(state => ({...state, birthDate: date}));
+
+        setBirthDate(dateStr);
+        setState(state => ({...state, birthDate: dateStr}));
         setState(state => ({...state, birthDateError : false}));
     }  
 
@@ -275,7 +278,7 @@ export default function InformationForm() {
         />  
         </Grid>
         <Grid item xs={12} md={12}>
-        <MuiPickersUtilsProvider utils={UTCUtils} locale={enGB}>
+        {/* <MuiPickersUtilsProvider utils={UTCUtils} locale={enGB}>
             <KeyboardDatePicker  
                         error={state.birthDateError ? true : false}
                         autoOk
@@ -289,7 +292,15 @@ export default function InformationForm() {
                         value={birthDate}
                         onChange={birthDateChanged}
                         />
-             </MuiPickersUtilsProvider>
+             </MuiPickersUtilsProvider> */}
+               <DateField
+                error={state.birthDateError}
+                title="Date of Birth"
+                value={birthDate}
+                dateChanged={birthDateChanged}
+             >
+
+             </DateField>
         </Grid>
         <Grid item xs={12} md={6}>
              <TextField

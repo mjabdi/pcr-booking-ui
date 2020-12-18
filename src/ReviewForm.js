@@ -21,6 +21,7 @@ import dateformat from 'dateformat';
 import {calculatePrice, calculateTotalPrice} from './PriceCalculator';
 
 import ValidateStep from './Validation';
+import { FormatDateFromString } from './DateFormatter';
 
 const useStyles = makeStyles((theme) => ({
   box: {
@@ -186,7 +187,7 @@ export default function ReviewForm() {
           title: state.title,
           firstname: state.firstname,
           lastname: state.lastname,
-          birthDate: dateformat(new Date(state.birthDate.toUTCString().slice(0, -4)),'yyyy-mm-dd'),
+          birthDate: state.birthDate,
           email: state.email,
           phone: state.phone,
           postCode: state.postCode,
@@ -261,7 +262,7 @@ export default function ReviewForm() {
                                   <span className={classes.infoTitle}>Email</span> <span className={classes.infoData}>{person.email}</span>   
                               </li>
                               <li className={classes.li}>
-                                  <span className={classes.infoTitle}>D.O.B</span> <span className={classes.infoData}>{dateFormat(new Date(person.birthDate),'dd mmm yyyy') }</span>  
+                                  <span className={classes.infoTitle}>D.O.B</span> <span className={classes.infoData}>{FormatDateFromString(person.birthDate)}</span>  
                               </li>
                               <li className={classes.li}>
                                   <span className={classes.infoTitle}>Telephone</span> <span className={classes.infoData}>{person.phone}</span>  
@@ -331,7 +332,7 @@ export default function ReviewForm() {
                                      <span className={classes.infoTitle}>Email</span> <span className={classes.infoData}>{state.email}</span>   
                                   </li>
                                   <li className={classes.li}>
-                                     <span className={classes.infoTitle}>D.O.B</span> <span className={classes.infoData}>{dateFormat(new Date(state.birthDate),'dd mmm yyyy') }</span>  
+                                     <span className={classes.infoTitle}>D.O.B</span> <span className={classes.infoData}>{FormatDateFromString(state.birthDate)} </span>  
                                   </li>
                                   <li className={classes.li}>
                                      <span className={classes.infoTitle}>Telephone</span> <span className={classes.infoData}>{state.phone}</span>  
@@ -389,7 +390,7 @@ export default function ReviewForm() {
               <ul className={classes.ul}>
                 <li className={classes.li}>
                 <FontAwesomeIcon icon={faCalendarAlt} className={classes.icon} />
-                    { dateformat(new Date(state.bookingDate.toUTCString().slice(0, -4)),'yyyy-mm-dd')}
+                    { dateformat(new Date(state.bookingDate.toUTCString().slice(0, -4)),'dd/mm/yyyy')}
                 </li>
                 <li className={classes.li}>
                 <FontAwesomeIcon icon={faHourglassHalf} className={classes.icon} />

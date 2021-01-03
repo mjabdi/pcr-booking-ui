@@ -14,6 +14,7 @@ import dateformat from 'dateformat';
 
 import {BrowserView, MobileView} from 'react-device-detect';
 
+
 // import Card from '@material-ui/core/Card';
 // import CardActions from '@material-ui/core/CardActions';
 // import CardContent from '@material-ui/core/CardContent';
@@ -134,6 +135,14 @@ export default function TimeForm() {
         //   }
         // }
 
+    
+        if (beforeFeb())
+        {
+          timeSlotsTmp.forEach(time =>
+            {
+              time.available = false;
+            });
+        }
 
         setTimeSlots(timeSlotsTmp);
         setDataLoaded(true);
@@ -179,6 +188,13 @@ export default function TimeForm() {
 
     }
 
+    const beforeFeb = () =>
+    {
+        const dateStr = dateformat(state.bookingDate, 'yyyy-mm-dd');
+        return dateStr < '2021-02-01';
+    }
+
+
   return (
     <React.Fragment>
       <Typography variant="h6" gutterBottom>
@@ -187,16 +203,18 @@ export default function TimeForm() {
 
       {dataLoaded ?  (
             
-          
-
+       
             <React.Fragment>
 
-              {checkFullyBooked(timeSlots) && (
+
+
+              {checkFullyBooked(timeSlots) &&  (
 
                 <React.Fragment>
                   <div style={{fontSize:"1.2rem", paddingTop:"10px", paddingBottom:"10px", color:"#db0000" , fontWeight: "500", background:"#fff5f5"}}>
                      Sorry this day is already fully booked! 
                      <br/>Please choose an alternative day.
+                     <br/> * All dates are fully booked until 1st February 2021. 
                   </div>
                    
                 </React.Fragment>
@@ -278,3 +296,5 @@ const checkFullyBooked = (timeSlots) =>
 
     return !available;
 }
+
+

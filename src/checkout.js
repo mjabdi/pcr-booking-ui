@@ -254,6 +254,12 @@ export default function Checkout() {
 
       setState(state => ({...state, ref: ref}));
 
+      let referrer = window.location.pathname
+      if (referrer && referrer.startsWith('/id'))
+      {
+        referrer = '/'
+      }
+
       if (!state.proceedToSubmit)
       {
         const personInfo = {
@@ -273,12 +279,12 @@ export default function Checkout() {
           antiBodyTest: state.antiBodyTest ?? false
         };
     
-        const promise = BookService.bookAppointment({...personInfo, bookingDate:  dateformat(new Date(state.bookingDate.toUTCString().slice(0, -4)),'yyyy-mm-dd'), bookingTime: state.bookingTime, bookingRef: ref, referrer: window.location.pathname});
+        const promise = BookService.bookAppointment({...personInfo, bookingDate:  dateformat(new Date(state.bookingDate.toUTCString().slice(0, -4)),'yyyy-mm-dd'), bookingTime: state.bookingTime, bookingRef: ref, referrer: referrer });
         promiseArray.push(promise);
       }
   
       for (var i=0 ; i < state.persons?.length; i++){
-        promiseArray.push(BookService.bookAppointment({...state.persons[i],bookingDate: dateformat(new Date(state.bookingDate.toUTCString().slice(0, -4)),'yyyy-mm-dd'), bookingTime: state.bookingTime, bookingRef: ref, referrer: window.location.pathname}));
+        promiseArray.push(BookService.bookAppointment({...state.persons[i],bookingDate: dateformat(new Date(state.bookingDate.toUTCString().slice(0, -4)),'yyyy-mm-dd'), bookingTime: state.bookingTime, bookingRef: ref, referrer: referrer}));
       }
       
       Promise.all(promiseArray).then( (values) => {

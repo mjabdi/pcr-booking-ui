@@ -12,4 +12,9 @@ export default class BookService {
         return API.get('/api/book/getnewreference');
     }
 
+    static getBookingById = (id) =>
+    {
+        return API.get(`/api/book/getbookingbyid?id=${id}`);
+    }
+
 }

@@ -196,7 +196,8 @@ export default function ReviewForm() {
           certificate: state.certificate ?? false,
           passportNumber: state.passportNumber,
           passportNumber2: state.passportNumber2,
-          antiBodyTest: state.antiBodyTest ?? false
+          antiBodyTest: state.antiBodyTest ?? false,
+          covidVaccine: state.covidVaccine
         }
           var newPersons = state.persons;
           newPersons.push(personInfo);
@@ -286,7 +287,9 @@ export default function ReviewForm() {
                             <li className={classes.li}>
                                 <span className={classes.infoTitle}>Request for Antibody Test</span> <span className={classes.infoData}>{person.antiBodyTest ? 'Yes' : 'No'}</span>  
                             </li>
-
+                            <li className={classes.li}>
+                                <span className={classes.infoTitle}>Covid Vaccine</span> <span className={classes.infoData}>{person.covidVaccine}</span>  
+                            </li>
                             <li className={classes.li}>
                                 <span className={classes.infoTitle}>Price</span> <span className={classes.infoData}>{`£${calculatePrice(person)}`}</span>  
                             </li>
@@ -356,6 +359,10 @@ export default function ReviewForm() {
                                 <li className={classes.li}>
                                     <span className={classes.infoTitle}>Request for Antibody Test</span> <span className={classes.infoData}>{state.antiBodyTest? 'Yes' : 'No'}</span>  
                                 </li>
+                                <li className={classes.li}>
+                                 <span className={classes.infoTitle}>Covid Vaccine</span> <span className={classes.infoData}>{state.covidVaccine}</span>  
+                               </li>
+
 
                                 <li className={classes.li}>
                                   <span className={classes.infoTitle}>Price</span> <span className={classes.infoData}>{`£${calculatePrice(state)}`}</span>  

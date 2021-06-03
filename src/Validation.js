@@ -72,6 +72,13 @@ export default function ValidateStep (state,setState, step)
         error = true;
       }
 
+      if (!state.covidVaccine)
+      {
+        setState(state => ({...state, covidVaccineError : true}));
+        error = true;
+
+      }
+
     }
     else if (step === 3){
       ///validate Address Info

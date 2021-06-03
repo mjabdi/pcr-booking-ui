@@ -276,7 +276,8 @@ export default function Checkout() {
           certificate: state.certificate,
           passportNumber: state.passportNumber,
           passportNumber2: state.passportNumber2,
-          antiBodyTest: state.antiBodyTest ?? false
+          antiBodyTest: state.antiBodyTest ?? false,
+          covidVaccine: state.covidVaccine
         };
     
         const promise = BookService.bookAppointment({...personInfo, bookingDate:  dateformat(new Date(state.bookingDate.toUTCString().slice(0, -4)),'yyyy-mm-dd'), bookingTime: state.bookingTime, bookingRef: ref, referrer: referrer });

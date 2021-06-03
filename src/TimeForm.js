@@ -214,7 +214,7 @@ export default function TimeForm() {
                   <div style={{fontSize:"1.2rem", paddingTop:"10px", paddingBottom:"10px", color:"#db0000" , fontWeight: "500", background:"#fff5f5"}}>
                      Sorry this day is already fully booked! 
                      <br/>Please choose an alternative day.
-                     <br/> * All dates are fully booked until 1st February 2021. 
+                     {/* <br/> * All dates are fully booked until 1st February 2021.  */}
                   </div>
                    
                 </React.Fragment>

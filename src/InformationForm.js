@@ -85,6 +85,9 @@ export default function InformationForm() {
     const [gender, setGender] = React.useState(state.gender ?? '');
     const [title, setTitle] = React.useState(state.title ?? '');
 
+    const [covidVaccine, setCovidVaccine] = React.useState(state.covidVaccine ?? '');
+
+
     const [emailConfirmed, setEmailConfirmed] = React.useState(state.emailConfirmed ?? false);
 
     const [passportNumber, setPassportNumber] = React.useState(state.passportNumber ?? '');
@@ -137,6 +140,13 @@ export default function InformationForm() {
             setState(state => ({...state, gender: event.target.value}));
             setState(state => ({...state, genderError : false}));
         };
+
+    const covidVaccineChanged = (event) => {
+      setCovidVaccine(event.target.value);
+      setState(state => ({...state, covidVaccine: event.target.value}));
+      setState(state => ({...state, covidVaccineError : false}));
+    };
+ 
 
     const birthDateChanged = (dateStr) =>
     {
@@ -331,6 +341,32 @@ export default function InformationForm() {
           />
           <p>{'* Please take care when entering your information, and double check that everything entered on this form is correct.'}</p>
         </Grid>
+
+        {/* <Grid item xs={12} md={6}>
+             <div style={{fontWeight:"500"}}>
+              * Have you had your Covid Vaccine?
+             </div>
+        </Grid> */}
+        
+        <Grid item xs={12}>
+            <FormControl className={classes.formControl} fullWidth required>
+                <InputLabel id="vaccine-label-id">Have you had your Covid Vaccine?</InputLabel>
+                <Select
+                    error={state.covidVaccineError ? true : false}
+                    fullWidth
+                    labelId="vaccine-label-id"
+                    id="vaccine-id"
+                    label="Have you had your Covid Vaccine?"
+                    value={covidVaccine}
+                    onChange={covidVaccineChanged}
+                >
+                    <MenuItem value={'NO'}>NO</MenuItem>
+                    <MenuItem value={'YES 1 Dose'}>YES 1 Dose</MenuItem>
+                    <MenuItem value={'YES 2 Dose'}>YES 2 Dose</MenuItem>
+                </Select>
+            </FormControl>
+        </Grid>
+
 
         <Grid item xs={12}>
                

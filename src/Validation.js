@@ -66,6 +66,13 @@ export default function ValidateStep (state,setState, step)
         error = true;
       }
 
+      if (!state.passportConfirmed)
+      {
+        setState(state => ({...state, passportConfirmedError : true}));
+        error = true;
+      }
+
+
       if (state.certificate && (!state.passportNumber || state.passportNumber.trim().length < 6))
       {
         setState(state => ({...state, passportNumberError : true}));

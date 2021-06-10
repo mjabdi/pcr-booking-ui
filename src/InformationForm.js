@@ -89,6 +89,8 @@ export default function InformationForm() {
 
 
     const [emailConfirmed, setEmailConfirmed] = React.useState(state.emailConfirmed ?? false);
+    const [passportConfirmed, setPassportConfirmed] = React.useState(state.passportConfirmed ?? false);
+
 
     const [passportNumber, setPassportNumber] = React.useState(state.passportNumber ?? '');
     const [passportNumber2, setPassportNumber2] = React.useState(state.passportNumber2 ?? '');
@@ -128,6 +130,13 @@ export default function InformationForm() {
       setState(state => ({...state, emailConfirmed: event.target.checked}));
       setState(state => ({...state, emailConfirmedError: false}));
   };
+
+  const passportConfirmedChanged = (event) => {
+    setPassportConfirmed(event.target.checked);
+    setState(state => ({...state, passportConfirmed: event.target.checked}));
+    setState(state => ({...state, passportConfirmedError: false}));
+};
+
 
     const titleChanged = (event) => {
             setTitle(event.target.value);
@@ -335,11 +344,21 @@ export default function InformationForm() {
         </Grid>
 
         <Grid item xs={12} className={classes.formControl} >
-          <FormControlLabel className={classes.formControl}  style={ {color: state.emailConfirmedError ? "red" : ''}} 
-            control={<Checkbox className={classes.formControl} style={ {color: state.emailConfirmedError ? "red" : ''}}  color="secondary" name="emailConfirmCheckBox" checked={emailConfirmed} onChange={emailConfirmedChanged} />}
-             label={<span style={{ fontSize: '0.8rem' }}>{`I confirm that this is a private email address to which I am happy for you to send my results.`} </span>}
+          <FormControlLabel className={classes.formControl} style={{ color: state.emailConfirmedError ? "red" : '' }}
+            control={<Checkbox className={classes.formControl} style={{ color: state.emailConfirmedError ? "red" : '' }} color="secondary" name="emailConfirmCheckBox" checked={emailConfirmed} onChange={emailConfirmedChanged} />}
+            label={<span style={{ fontSize: '0.8rem' }}>{`I confirm that this is a private email address to which I am happy for you to send my results.`} </span>}
           />
+        </Grid>
+
+        <Grid item xs={12} className={classes.formControl}>
+          <FormControlLabel className={classes.formControl} style={{ color: state.passportConfirmedError ? "red" : '' }}
+            control={<Checkbox className={classes.formControl} style={{ color: state.passportConfirmedError ? "red" : '' }} color="secondary" name="emailConfirmCheckBox" checked={passportConfirmed} onChange={passportConfirmedChanged} />}
+            label={<span style={{ fontSize: '0.8rem' }}>{`As part of testing requirements outlined by the Department of Health and Social Services, we will need to check your identity before conducting your test. Please tick to confirm that you will bring your passport or a copy to your test appointment.`} </span>}
+          />
+
           <p>{'* Please take care when entering your information, and double check that everything entered on this form is correct.'}</p>
+
+
         </Grid>
 
         {/* <Grid item xs={12} md={6}>

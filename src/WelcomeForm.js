@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { makeStyles, useTheme } from '@material-ui/core/styles';
+import { lighten, makeStyles, useTheme } from '@material-ui/core/styles';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -17,7 +17,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 
 import HttpsIcon from '@material-ui/icons/Https';
 
-import {BrowserView, MobileView, isMobile} from 'react-device-detect';
+import { BrowserView, MobileView, isMobile } from 'react-device-detect';
 
 import AirplanemodeActiveIcon from '@material-ui/icons/AirplanemodeActive';
 import { Grid } from '@material-ui/core';
@@ -35,12 +35,12 @@ function Copyright() {
       {new Date().getFullYear()}
       {' '}
       <Link color="inherit" href="#">
-           <strong> Medical Express Clinic </strong> 
-      </Link>{isMobile ? ' ' : ' All rights reserved.' }
-   
-       
- 
-     
+        <strong> Medical Express Clinic </strong>
+      </Link>{isMobile ? ' ' : ' All rights reserved.'}
+
+
+
+
     </Typography>
   );
 }
@@ -103,56 +103,64 @@ const useStyles = makeStyles((theme) => ({
     width: "40px",
     height: "40px",
     marginLeft: "0px",
-    
+
   },
 
   privacyButton: {
-    marginBottom : "20px",
+    marginBottom: "20px",
     width: "115px"
   },
 
   faqButton: {
-    marginBottom : "20px",
-    marginLeft : "10px",
-    backgroundColor : "#2f942e",
+    marginBottom: "20px",
+    marginLeft: "10px",
+    backgroundColor: "#2f942e",
     "&:hover": {
       background: "green",
       color: "#fff"
     },
-    textDecoration : "none !important",
+    textDecoration: "none !important",
     width: "115px"
 
   },
 
-  textContent : {
-      color : "#666f77",
-      fontSize : "1.1rem",
-      textAlign: "justify",
-      paddingLeft: "30px",
-      paddingRight: "30px",
-      lineHeight: "2.2em",
-      fontWeight : "400"
-  },
-
-  textContentMobile : {
-    color : "#666f77",
-    fontSize : "0.9rem",
+  textContent: {
+    color: "#555",
+    fontSize: "1.1rem",
     textAlign: "justify",
     paddingLeft: "30px",
     paddingRight: "30px",
     lineHeight: "2.2em",
-    fontWeight : "400"
-},
+    fontWeight: "400"
+  },
+
+  textContentMobile: {
+    color: "#555",
+    fontSize: "0.9rem",
+    textAlign: "justify",
+    paddingLeft: "30px",
+    paddingRight: "30px",
+    lineHeight: "2.2em",
+    fontWeight: "400"
+  },
 
   getStartedButton: {
-      marginTop : "10px",
-      marginBottom : "10px",
+    marginTop: "10px",
+    marginBottom: "10px",
 
   },
 
-  AirIcon : {
-      marginRight : "10px",
-      fontSize: "32px"
+  AirIcon: {
+    marginRight: "10px",
+    fontSize: "32px"
+  },
+
+  UList: {
+    margin: 0,
+    padding: 0,
+    listStyle: "none",
+    display: "grid",
+    gridGap: "1rem",
   }
 
 }));
@@ -218,9 +226,9 @@ export default function WelcomeForm() {
   };
 
 
-const getStartedClicked = (event) => {
-    setState(state => ({...state, getStarted: true}));
-}
+  const getStartedClicked = (event) => {
+    setState(state => ({ ...state, getStarted: true }));
+  }
 
   return (
     <React.Fragment>
@@ -257,10 +265,10 @@ const getStartedClicked = (event) => {
       </AppBar>
       <main className={classes.layout}>
         <Paper className={classes.paper}>
-         
+
           {state.firstname && state.firstname.length > 0 && (
-            <div style={{textAlign:'center', fontSize:"1rem", marginBottom:"10px", color:"#777",backgroundColor:"#f7fbff",padding:"20px"}}>
-                Welcome back <span style={{fontWeight:"500", color:"#333", fontStyle:"italic"}}>{state.firstname}</span>
+            <div style={{ textAlign: 'center', fontSize: "1rem", marginBottom: "10px", color: "#777", backgroundColor: "#f7fbff", padding: "20px" }}>
+              Welcome back <span style={{ fontWeight: "500", color: "#333", fontStyle: "italic" }}>{state.firstname}</span>
             </div>
           )}
 
@@ -285,66 +293,68 @@ const getStartedClicked = (event) => {
             </div>
           </Typography>
 
-          <p
+          <ul className={classes.UList}>
+
+         
+
+          <li
             className={
               isMobile ? classes.textContentMobile : classes.textContent
             }
           >
-            Universally accepted for international travel to all destinations.
-          </p>
+            Universally accepted for international travel to all destinations - please check to make sure your destination country requires a PCR test prior to entry.
 
-          <p
+          </li>
+
+          <li
             className={
               isMobile ? classes.textContentMobile : classes.textContent
             }
           >
-            Nasopharyngeal swab sample taken from the back of the nose and
-            throat.
-          </p>
+            Nasopharyngeal swab sample taken from the back of the nose and throat.
+          </li>
 
-          <p
+          <li
             className={
               isMobile ? classes.textContentMobile : classes.textContent
             }
           >
             COVID-19 PCR test to detect viral RNA.
-          </p>
+          </li>
 
-          <p
+          <li
             className={
               isMobile ? classes.textContentMobile : classes.textContent
             }
           >
-            Guaranteed results within 48 hours - over 90% of our results return
-            before 24 hours of clinic appointment.
-          </p>
+            Guaranteed results within 48 hours - over 90% of our results return before 24 hours of clinic appointment. Test timing requirements differ from country to country, so please check your requirements carefully.
+          </li>
 
-          <p
+          <li
             className={
               isMobile ? classes.textContentMobile : classes.textContent
             }
           >
-            Secure, verifiable results sent in PDF format via email, hard copies
-            available to collect.
-          </p>
+            Secure, verifiable results sent in PDF format via email, hard copies available to collect.
+          </li>
 
-          <p
+          <li
             className={
               isMobile ? classes.textContentMobile : classes.textContent
             }
           >
             No card details or payment necessary.
-          </p>
+          </li>
 
-          <p
+          <li
             className={
               isMobile ? classes.textContentMobile : classes.textContent
             }
           >
-            Plans change and you may need to cancel or rearrange your
-            appointment. We take payment for your test only when you attend the
-            clinic.
-          </p>
+            Plans change and you may need to cancel or rearrange your appointment. We take payment for your test only when you attend the clinic.
+          </li>
+
+          </ul>
 
           <Button
             variant="contained"
@@ -386,7 +396,7 @@ const getStartedClicked = (event) => {
           aria-describedby="scroll-dialog-description"
         >
           <DialogTitle id="scroll-dialog-title">
-              PRIVACY NOTICE
+            PRIVACY NOTICE
           </DialogTitle>
           <DialogContent dividers={scroll === "paper"}>
             <DialogContentText
@@ -394,13 +404,13 @@ const getStartedClicked = (event) => {
               ref={descriptionElementRef}
               tabIndex={-1}
             >
-              <div style={{ textAlign: "justify", padding: "0px", color:"#333" }}>
+              <div style={{ textAlign: "justify", padding: "0px", color: "#333" }}>
                 <p>
                   Medical Express Clinic collects and holds the personal data of patients registered at the clinic so as to provide safe and effective ongoing care for our patients.
                 </p>
                 <p>
                   Medical records are kept confidentially and securely under lock and key or securely on our server. They are primarily used for the safe and effective delivery of care.
-                </p>  
+                </p>
                 <p>
                   Your medical record may be subject to clinical audit and management review in order for Medical Express Clinic to maintain and improve our provision of care.
                 </p>

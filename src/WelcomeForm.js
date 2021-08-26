@@ -319,7 +319,7 @@ export default function WelcomeForm() {
               isMobile ? classes.textContentMobile : classes.textContent
             }
           >
-            COVID-19 PCR test to detect viral RNA.
+            Fully UKAS Accredited COVID-19 PCR test to detect viral RNA.
           </li>
 
           <li

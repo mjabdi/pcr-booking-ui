@@ -57,9 +57,9 @@ function App() {
     <GlobalState.Provider value={[state, setState]}>
       <div className="App">
 
-        {!state.getStarted && ( <WelcomeForm/> )}
+        {/* {!state.getStarted && ( <WelcomeForm/> )}
         {state.getStarted && !state.agreed && ( <AgreementForm/>  )}
-        {state.getStarted && state.agreed  && ( <Checkout/>  )}
+        {state.getStarted && state.agreed  && ( <Checkout/>  )} */}
 
        
       </div>
